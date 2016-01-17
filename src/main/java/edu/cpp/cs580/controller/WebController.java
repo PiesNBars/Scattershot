@@ -13,36 +13,33 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.cpp.cs580.App;
 import edu.cpp.cs580.data.User;
 import edu.cpp.cs580.data.provider.UserManager;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This is the controller used by Spring framework.
  * <p>
- * The basic function of this controller is to map
- * each HTTP API Path to the correspondent method.
+ * The basic function of this controller is to map each HTTP API Path to the
+ * correspondent method.
  *
  */
-
 @RestController
 public class WebController {
 
 	/**
-	 * When the class instance is annotated with
-	 * {@link Autowired}, it will be looking for the actual
-	 * instance from the defined beans.
+	 * When the class instance is annotated with {@link Autowired}, it will be
+	 * looking for the actual instance from the defined beans.
 	 * <p>
-	 * In our project, all the beans are defined in
-	 * the {@link App} class.
+	 * In our project, all the beans are defined in the {@link App} class.
 	 */
 	@Autowired
-	private UserManager userManager;	
+	private UserManager userManager;
 
 	/**
-	 * This is a simple example of how the HTTP API works.
-	 * It returns a String "OK" in the HTTP response.
-	 * To try it, run the web application locally,
-	 * in your web browser, type the link:
-	 * 	http://localhost:8080/cs580/ping
+	 * This is a simple example of how the HTTP API works. It returns a String
+	 * "OK" in the HTTP response. To try it, run the web application locally, in
+	 * your web browser, type the link: http://localhost:8080/cs580/ping
 	 */
 	@RequestMapping(value = "/cs580/ping", method = RequestMethod.GET)
 	String healthCheck() {
@@ -53,15 +50,14 @@ public class WebController {
 	}
 
 	/**
-	 * This is a simple example of how to use a data manager
-	 * to retrieve the data and return it as an HTTP response.
+	 * This is a simple example of how to use a data manager to retrieve the
+	 * data and return it as an HTTP response.
 	 *
 	 * <p>
-	 * Note, when it returns from the Spring, it will be
-	 * automatically converted to JSON format.
+	 * Note, when it returns from the Spring, it will be automatically converted
+	 * to JSON format.
 	 * <p>
-	 * Try it in your web browser:
-	 * 	http://localhost:8080/cs580/user/user101
+	 * Try it in your web browser: http://localhost:8080/cs580/user/user101
 	 */
 	@RequestMapping(value = "/cs580/user/{userId}", method = RequestMethod.GET)
 	User getUser(@PathVariable("userId") String userId) {
@@ -70,17 +66,14 @@ public class WebController {
 	}
 
 	/**
-	 * This is an example of sending an HTTP POST request to
-	 * update a user's information (or create the user if not
-	 * exists before).
+	 * This is an example of sending an HTTP POST request to update a user's
+	 * information (or create the user if not exists before).
 	 *
 	 * You can test this with a HTTP client by sending
-	 *  http://localhost:8080/cs580/user/user101
-	 *  	name=John major=CS
+	 * http://localhost:8080/cs580/user/user101 name=John major=CS
 	 *
-	 * Note, the URL will not work directly in browser, because
-	 * it is not a GET request. You need to use a tool such as
-	 * curl.
+	 * Note, the URL will not work directly in browser, because it is not a GET
+	 * request. You need to use a tool such as curl.
 	 *
 	 * @param id
 	 * @param name
@@ -121,7 +114,9 @@ public class WebController {
 		return userManager.listAllUsers();
 	}
 
-	/*********** Web UI Test Utility **********/
+	/**
+	 * ********* Web UI Test Utility *********
+	 */
 	/**
 	 * This method provide a simple web UI for you to test the different
 	 * functionalities used in this web service.
@@ -130,6 +125,13 @@ public class WebController {
 	ModelAndView getUserHomepage() {
 		ModelAndView modelAndView = new ModelAndView("home");
 		modelAndView.addObject("users", listAllUsers());
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/cs580/login", method = RequestMethod.GET)
+	ModelAndView getLoginPage() {
+		ModelAndView modelAndView = new ModelAndView("login");
+		modelAndView.addObject("title", "login page title");
 		return modelAndView;
 	}
 
