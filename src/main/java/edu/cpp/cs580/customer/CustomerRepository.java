@@ -3,11 +3,12 @@ package edu.cpp.cs580.customer;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface CustomerRepository extends MongoRepository<Customer, String> {
-	public Customer findByFirstName(String firstName);
-	public Customer findByLastName(String lastName);
-	public Customer findById(String id);
-	public List<Customer> findAllByFirstName(String firstName);
-	public List<Customer> findAllByLastName(String lastName);
+	public Customer findByFirstName(@Param("firstName") String firstName);
+	public Customer findByLastName(@Param("lastName") String lastName);
+	public Customer findById(@Param("id") String id);
+	public List<Customer> findAllByFirstName(@Param("firstName") String firstName);
+	public List<Customer> findAllByLastName(@Param("lastName") String lastName);
 }
