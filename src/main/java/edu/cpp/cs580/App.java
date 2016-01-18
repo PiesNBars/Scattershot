@@ -1,19 +1,21 @@
 package edu.cpp.cs580;
 
+import edu.cpp.cs580.customer.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 import edu.cpp.cs580.data.provider.FSUserManager;
 import edu.cpp.cs580.data.provider.UserManager;
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan
+@SpringBootApplication
 public class App {
 
+	@Autowired
+	private CustomerRepository repo;
+	
     /**
      * This is a good example of how Spring instantiates
      * objects. The instances generated from this method
@@ -25,7 +27,7 @@ public class App {
         UserManager userManager = new FSUserManager();
         return userManager;
     }
-
+    
     /**
      * This is the running main method for the web application.
      * Please note that Spring requires that there is one and
