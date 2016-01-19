@@ -13,9 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.cpp.cs580.App;
 import edu.cpp.cs580.data.User;
 import edu.cpp.cs580.data.provider.UserManager;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This is the controller used by Spring framework.
@@ -125,13 +122,6 @@ public class WebController {
 	ModelAndView getUserHomepage() {
 		ModelAndView modelAndView = new ModelAndView("home");
 		modelAndView.addObject("users", listAllUsers());
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/cs580/login", method = RequestMethod.GET)
-	ModelAndView getLoginPage() {
-		ModelAndView modelAndView = new ModelAndView("login");
-		modelAndView.addObject("title", "login page title");
 		return modelAndView;
 	}
 
