@@ -67,5 +67,6 @@
 			</form>
 		</div>
 	</div>
+	<script src="/js/toggle.js"></script>
 </body>
 </html>
