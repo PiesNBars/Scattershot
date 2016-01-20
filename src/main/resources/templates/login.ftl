@@ -35,7 +35,7 @@
 					<div class="bar"></div>
 				</div>
 				<div class="button-container">
-					<button onclick="addUser()"><span>Go</span></button>
+					<button onclick="addCustomer()"><span>Go</span></button>
 				</div>
 				<div class="footer"><a href="#">Forgot your password?</a></div>
 			</form>
