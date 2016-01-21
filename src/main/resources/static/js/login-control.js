@@ -30,25 +30,28 @@ function addUser() {
 }
 
 function addCustomer() {
-	var userName = $('#Username').val();
-	var password = $('#Password').val();
+	var email = $('#RegisterEmail').val();
+	var password = $('#RegisterPassword').val();
 
-	if (userName) {
+	if (email) {
 		$.ajax(
 				{
 					type: "POST",
 					url: "/customers",
 					contentType: "application/json",
 					data: JSON.stringify({
-						"email": userName,
+						"email": email,
 						"password": password
 					}),
-					success: function (result) {
-						alert("success");
-						location.reload();
-					},
-					error: function (jqXHR, exception) {
-						alert("Failed.");
+					complete: function(xhr) {
+						if (xhr.readyState == 4) {
+							if (xhr.status == 201) {
+								alert("Created");
+							}
+						}
+						else {
+							alert(JSON.stringfy(xhr));
+						}
 					}
 				});
 	}
