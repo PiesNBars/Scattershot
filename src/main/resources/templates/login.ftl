@@ -47,13 +47,13 @@
 			</h1>
 			<form>
 				<div class="input-container">
-					<input type="text" id="Username" required="required"/>
-					<label for="Username">Username</label>
+					<input type="text" id="RegisterEmail" required="required"/>
+					<label for="RegisterEmail">Email</label>
 					<div class="bar"></div>
 				</div>
 				<div class="input-container">
-					<input type="password" id="Password" required="required"/>
-					<label for="Password">Password</label>
+					<input type="password" id="RegisterPassword" required="required"/>
+					<label for="RegisterPassword">Password</label>
 					<div class="bar"></div>
 				</div>
 				<div class="input-container">
@@ -62,7 +62,7 @@
 					<div class="bar"></div>
 				</div>
 				<div class="button-container">
-					<button><span>Next</span></button>
+					<button onclick="addCustomer()"><span>Next</span></button>
 				</div>
 			</form>
 		</div>
