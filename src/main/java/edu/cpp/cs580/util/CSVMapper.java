@@ -13,11 +13,13 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.cpp.cs580.customer.data.CustomerDataset;
+
 public class CSVMapper {
 	
 	private static final String CHAR_FORMAT = "UTF-8";
 	
-	public static List<Map<String, String>> mapCSV(MultipartFile file,
+	public static CustomerDataset mapCSV(MultipartFile file,
 			boolean fileContainsHeader) throws Exception {
 		
 		if(fileContainsHeader)
@@ -29,7 +31,7 @@ public class CSVMapper {
 		return mapCSV(file, header);
 	}	
 	
-	public static List<Map<String, String>> mapCSV(MultipartFile file)
+	public static CustomerDataset mapCSV(MultipartFile file)
 			throws Exception {
 		
 		List<Map<String, String>> table = new ArrayList<>();
@@ -37,30 +39,32 @@ public class CSVMapper {
 		InputStreamReader reader = new InputStreamReader(in, CHAR_FORMAT);
 		CSVFormat format = CSVFormat.RFC4180;
 		CSVParser parser = new CSVParser(reader, format);
+		Map<String, Integer> header = parser.getHeaderMap();
 
 		for(CSVRecord tuple : parser)
 			table.add(tuple.toMap());
 		
 		parser.close();
 		
-		return table;
+		return new CustomerDataset(table, header);
 	}
 	
-	public static List<Map<String, String>> mapCSV(MultipartFile file,
-			String[] header) throws Exception {
+	public static CustomerDataset mapCSV(MultipartFile file,
+			String[] columnNames) throws Exception {
 
 		List<Map<String, String>> table = new ArrayList<>();
 		InputStream in = file.getInputStream();
 		InputStreamReader reader = new InputStreamReader(in, CHAR_FORMAT);
-		CSVFormat format = CSVFormat.RFC4180.withHeader(header);
+		CSVFormat format = CSVFormat.RFC4180.withHeader(columnNames);
 		CSVParser parser = new CSVParser(reader, format);
+		Map<String, Integer> header = parser.getHeaderMap();
 		
 		for(CSVRecord tuple : parser)
 			table.add(tuple.toMap());
 		
 		parser.close();
 		
-		return table;
+		return new CustomerDataset(table, header);
 	}
 	
 	private static String[] generateHeader(int columns) {
