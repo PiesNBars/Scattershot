@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.annotation.Id;
+
 public class CustomerDataset {
 
+	@Id
+	private String id;
+	private String customerId;
 	private String name;
 	private Map<String, Integer> header;
 	private List<Map<String, String>> dataset;
@@ -14,6 +19,28 @@ public class CustomerDataset {
 		dataset = new ArrayList<Map<String, String>>();
 		header = null;
 		name = null;
+	}
+	
+	public CustomerDataset(List<Map<String,String>> dataset,
+			Map<String, Integer> header){
+		this.dataset = dataset;
+		this.header = header;
+	}
+	
+	public String getId() {
+		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getCustomerId() {
+		return customerId;
+	}
+	
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 	
 	public List<Map<String, String>> getDataset() {

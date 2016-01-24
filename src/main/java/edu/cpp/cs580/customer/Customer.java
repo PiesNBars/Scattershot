@@ -1,11 +1,6 @@
 package edu.cpp.cs580.customer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
-
-import edu.cpp.cs580.customer.data.CustomerDataset;
 
 public class Customer {
 
@@ -15,11 +10,8 @@ public class Customer {
 	private String lastName;
 	private String email;
 	private String password;
-	private List<CustomerDataset> datasets;
 
-	public Customer() {
-		this.datasets = new ArrayList<CustomerDataset>();
-	}
+	public Customer() {}
 	
 	public Customer(Customer customer) {
 		this.id = customer.id;
@@ -27,7 +19,6 @@ public class Customer {
 		this.password = customer.password;
 		this.firstName = customer.firstName;
 		this.lastName = customer.lastName;
-		this.datasets = customer.datasets;
 	}
 
 	public Customer(String email, String password) {
@@ -41,10 +32,6 @@ public class Customer {
 		this(email, password);
 		this.firstName = firstName;
 		this.lastName = lastName;
-	}
-	
-	public void addDataset(CustomerDataset dataset) {
-		datasets.add(dataset);
 	}
 
 	public String getId() {
@@ -85,14 +72,6 @@ public class Customer {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public List<CustomerDataset> getDatasets() {
-		return datasets;
-	}
-
-	public void setDatasets(List<CustomerDataset> datasets) {
-		this.datasets = datasets;
 	}
 
 	@Override
