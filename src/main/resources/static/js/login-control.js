@@ -33,7 +33,12 @@ function addCustomer() {
 	var email = $('#RegisterEmail').val();
 	var password = $('#RegisterPassword').val();
 
+	var exist;
 	if (email) {
+		existCheck(function(result) {
+			exist = result;
+		});
+alert("test: " + exist);
 		$.ajax(
 				{
 					type: "POST",
@@ -56,6 +61,25 @@ function addCustomer() {
 				});
 	}
 	else {
-		alert("Invalid user Id");
+		alert("Please use a valid email");
 	}
+}
+
+function existCheck(callback) {
+	$.ajax(
+			{
+				type : "GET",
+				url  : "/customer/checkExist",
+				async: false,
+				data : {
+				},
+				success : function(result) {
+					$('#status').text(result);
+					callback(result);
+					
+				},
+				error: function (jqXHR, exception) {
+					$('#status').text("Failed to get the status");
+				}
+			});
 }
