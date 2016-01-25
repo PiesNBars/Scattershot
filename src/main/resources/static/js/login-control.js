@@ -4,7 +4,7 @@ function addCustomer() {
 	var exist;
 
 	if (email) {
-		existCheck(function(result) {
+		existCheck(email, function(result) {
 			exist = result;
 		});
 alert("test: " + exist);
@@ -34,20 +34,22 @@ alert("test: " + exist);
 	}
 }
 
-function existCheck(callback) {
+function existCheck(email, callback) {
+	data = { email: email };
 	$.ajax(
 		{
-			type : "GET",
+			type : "POST",
 			url  : "/customer/checkExist",
 			async: false,
-			data : {
-			},
+			data : data,
 			success : function(result) {
+				alert("success");
 				$('#status').text(result);
 				callback(result);
 
 			},
 			error: function (jqXHR, exception) {
+				alert("error");
 				$('#status').text("Failed to get the status");
 			}
 		});
