@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -39,7 +40,7 @@ public class CSVMapper {
 		InputStreamReader reader = new InputStreamReader(in, CHAR_FORMAT);
 		CSVFormat format = CSVFormat.RFC4180;
 		CSVParser parser = new CSVParser(reader, format);
-		Map<String, Integer> header = parser.getHeaderMap();
+		Set<String> header = parser.getHeaderMap().keySet();
 
 		for(CSVRecord tuple : parser)
 			table.add(tuple.toMap());
@@ -57,7 +58,7 @@ public class CSVMapper {
 		InputStreamReader reader = new InputStreamReader(in, CHAR_FORMAT);
 		CSVFormat format = CSVFormat.RFC4180.withHeader(columnNames);
 		CSVParser parser = new CSVParser(reader, format);
-		Map<String, Integer> header = parser.getHeaderMap();
+		Set<String> header = parser.getHeaderMap().keySet();
 		
 		for(CSVRecord tuple : parser)
 			table.add(tuple.toMap());
