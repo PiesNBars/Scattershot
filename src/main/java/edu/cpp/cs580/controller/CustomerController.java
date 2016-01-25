@@ -28,17 +28,14 @@ public class CustomerController {
 	String existCheck(@RequestParam("email") String email) {
 		List<Customer> customerList = customerRepository.findAll();
 
-		System.out.println(email);
-
 		for (Customer customer : customerList) {
-			System.out.println("ID: " + customer.getId() + " Email: " + customer.getEmail());
 			String customerEmail = customer.getEmail();
 
 			if (customerEmail.equals(email)) {
-				return "duplicated, ID: " + customer.getId();
+				return customer.getId();
 			}
 		}
-		return "tomokay";
+		return "false";
 	}
 
 	@RequestMapping(value = "/cs580/login", method = RequestMethod.GET)

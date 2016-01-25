@@ -7,27 +7,32 @@ function addCustomer() {
 		existCheck(email, function(result) {
 			exist = result;
 		});
-alert("test: " + exist);
-		$.ajax(
-			{
-				type: "POST",
-				url: "/customers",
-				contentType: "application/json",
-				data: JSON.stringify({
-					"email": email,
-					"password": password
-				}),
-				complete: function(xhr) {
-					if (xhr.readyState == 4) {
-						if (xhr.status == 201) {
-							alert("Created");
+
+		if (exist == "false") {
+			$.ajax(
+				{
+					type: "POST",
+					url: "/customers",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"email": email,
+						"password": password
+					}),
+					complete: function(xhr) {
+						if (xhr.readyState == 4) {
+							if (xhr.status == 201) {
+								alert("Created");
+							}
+						}
+						else {
+							alert(JSON.stringfy(xhr));
 						}
 					}
-					else {
-						alert(JSON.stringfy(xhr));
-					}
-				}
-			});
+				});
+		}
+		else {
+			alert("The email address you have entered is already registered");
+		}
 	}
 	else {
 		alert("Please use a valid email");
