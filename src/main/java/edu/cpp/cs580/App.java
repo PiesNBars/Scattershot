@@ -7,6 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import edu.cpp.cs580.data.provider.FSUserManager;
 import edu.cpp.cs580.data.provider.UserManager;
 
@@ -15,6 +17,11 @@ public class App {
 
 	@Autowired
 	private CustomerRepository repo;
+	
+	@Bean
+	public ObjectMapper objectMapper() {
+		return new ObjectMapper();
+	}
 	
     /**
      * This is a good example of how Spring instantiates

@@ -1,8 +1,10 @@
 package edu.cpp.cs580.customer.data;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import org.springframework.data.annotation.Id;
 
@@ -69,5 +71,14 @@ public class CustomerDataset {
 	
 	public void insertRow(Map<String, String> row) {
 		dataset.add(row);
+	}
+	
+	public List<String> getColumn(String columnName) {
+		List<String> column = new ArrayList<>();
+		Iterator<Map<String, String>> it = dataset.iterator();
+		while(it.hasNext())
+			column.add(it.next().get(columnName));
+		
+		return column;
 	}
 }
