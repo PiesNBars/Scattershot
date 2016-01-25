@@ -1,10 +1,7 @@
 package edu.cpp.cs580.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.cpp.cs580.customer.CustomerRepository;
 import edu.cpp.cs580.customer.data.CustomerDataset;
 import edu.cpp.cs580.customer.data.DatasetRepository;
-import edu.cpp.cs580.customer.data.DatasetVector;
 import edu.cpp.cs580.util.CSVMapper;
 
 @RestController
@@ -36,22 +32,11 @@ public class DatasetController {
 			return "You didn't provide a customer Id!";
 		if(datasetName.isEmpty())
 			return "You didn't provide a dataset name!";
-		
-		DatasetVector.DataType type = DatasetVector.DataType.CATAGORY;
-		String response = null;
+
 		String[] variables = columns.split(",");
-		List<DatasetVector<String>> resultset = new ArrayList<>();
 		CustomerDataset dataset = datasetRepository
 				.findByCustomerIdAndName(customerId, datasetName);
-		String datasetId = dataset.getId();
-		
-		for(String columnName : variables){
-			DatasetVector<String> column = new DatasetVector<>();
-			column.setDatasetId(datasetId);
-			column.setDataType(type);
-			column.setValues(dataset.getColumn(columnName));
-			resultset.add(column);
-		}
+		CustomerDataset resultset = dataset.getColumns(variables);
 		
 		return objectMapper.writeValueAsString(resultset);
 	}
@@ -60,11 +45,11 @@ public class DatasetController {
     public @ResponseBody String handleFileUpload(@RequestParam("id") String customerId,
     		@RequestParam("name") String name,
     		@RequestParam("file") MultipartFile file,
-    		@RequestParam("header") String header,
-    		@RequestParam(required=false, value="hasHeaderRow") Boolean hasHeaderRow){
+    		@RequestParam(required=false, value="header") String header,
+    		@RequestParam("hasOwnHeaders") String hasHeaderRow){
     	
     	String[] columnNames = null;
-    	boolean hasHeader = (hasHeaderRow != null) ?true : false;
+    	boolean hasHeader = hasHeaderRow == "true" ? true : false;
     	
     	if(header != null && header.length() > 0)
     		columnNames = header.split(",");
@@ -77,7 +62,7 @@ public class DatasetController {
     	
         if (!file.isEmpty()) {
             try {
-            	CustomerDataset data = (columnNames == null) ?
+            	CustomerDataset data = (columnNames != null) ?
             			CSVMapper.mapCSV(file, columnNames) :
             			CSVMapper.mapCSV(file, hasHeader);
             	
@@ -88,6 +73,7 @@ public class DatasetController {
             	       
                 return "You successfully uploaded " + name + "!";
             } catch (Exception e) {
+                e.printStackTrace();
                 return "You failed to upload " + name + " => " + e.getMessage();
             }
         } else {

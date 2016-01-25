@@ -5,7 +5,9 @@
 		action="/upload">
 		Customer Id: <input type="text" name="id"><br/>
 		Column names: <input type="text" name="header"><br/>
-		Does this file contain headers?: <input type="checkbox" name="hasHeaderRow" value="hasHeaderRow"><br/>
+		Does this file contain a header row (column names)?:
+		<input type="radio" name="hasOwnHeaders" value="true" checked/>Yes
+		<input type="radio" name="hasOwnHeaders" value="false"/>No<br/>
 		File to upload: <input type="file" name="file"><br />
 		Name: <input type="text" name="name"><br /> <br />
 		<input type="submit" value="Upload"> Press here to upload the file!
