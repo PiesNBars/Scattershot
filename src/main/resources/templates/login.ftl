@@ -1,3 +1,5 @@
+<#import "/spring.ftl" as spring />
+<@spring.bind "customer" />
 <html>
 
 <head>
@@ -45,14 +47,14 @@
 			<h1 class="title">Register
 				<div class="close"></div>
 			</h1>
-			<form method="post" action="login" modelAttribute="customer">
+			<form method="post" action="login">
 				<div class="input-container">
-					<input type="text" id="RegisterEmail" required="required"/>
+					<@spring.formInput "customer.email" />
 					<label for="RegisterEmail">Email</label>
 					<div class="bar"></div>
 				</div>
 				<div class="input-container">
-					<input type="password" id="RegisterPassword" required="required"/>
+					<@spring.formPasswordInput "customer.password" />
 					<label for="RegisterPassword">Password</label>
 					<div class="bar"></div>
 				</div>
@@ -62,7 +64,7 @@
 					<div class="bar"></div>
 				</div>
 				<div class="button-container">
-					<button type="submit" onclick="addCustomer()"><span>Next</span></button>
+					<button type="submit"><span>Next</span></button>
 				</div>
 			</form>
 		</div>
