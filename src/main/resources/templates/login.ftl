@@ -45,7 +45,7 @@
 			<h1 class="title">Register
 				<div class="close"></div>
 			</h1>
-			<form>
+			<form method="post" action="login" modelAttribute="customer">
 				<div class="input-container">
 					<input type="text" id="RegisterEmail" required="required"/>
 					<label for="RegisterEmail">Email</label>
@@ -62,7 +62,7 @@
 					<div class="bar"></div>
 				</div>
 				<div class="button-container">
-					<button onclick="addCustomer()"><span>Next</span></button>
+					<button type="submit" onclick="addCustomer()"><span>Next</span></button>
 				</div>
 			</form>
 		</div>

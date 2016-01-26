@@ -10,6 +10,8 @@ import edu.cpp.cs580.customer.Customer;
 import edu.cpp.cs580.customer.CustomerRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,9 +41,17 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = "/cs580/login", method = RequestMethod.GET)
-	ModelAndView getLoginPage() {
+	ModelAndView getLoginPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("login");
 		modelAndView.addObject("title", "login page title");
+		m.addAttribute("customer", new Customer());
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/cs580/login", method = RequestMethod.POST)
+	ModelAndView showExistPage(@ModelAttribute("customer") Customer customer, Model m) {
+		ModelAndView modelAndView = new ModelAndView("customerExist");
+		System.out.println("dup email: " + customer.getEmail());
 		return modelAndView;
 	}
 }
