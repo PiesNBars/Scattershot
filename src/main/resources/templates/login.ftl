@@ -25,19 +25,19 @@
 		<div class="card"></div>
 		<div class="card">
 			<h1 class="title">Login</h1>
-			<form>
+			<form method="post" action="login">
 				<div class="input-container">
-					<input type="text" id="Username" required="required"/>
-					<label for="Username">Username</label>
+					<@spring.formInput "customer.email" />
+					<label for="Email">Email</label>
 					<div class="bar"></div>
 				</div>
 				<div class="input-container">
-					<input type="password" id="Password" required="required"/>
+					<@spring.formPasswordInput 'customer.password'/>
 					<label for="Password">Password</label>
 					<div class="bar"></div>
 				</div>
 				<div class="button-container">
-					<button onclick="addCustomer()"><span>Go</span></button>
+					<button type="submit"><span>Next</span></button>
 				</div>
 				<div class="footer"><a href="#">Forgot your password?</a></div>
 			</form>
@@ -47,7 +47,7 @@
 			<h1 class="title">Register
 				<div class="close"></div>
 			</h1>
-			<form method="post" action="login">
+			<form method="post" action="register">
 				<div class="input-container">
 					<@spring.formInput "customer.email" />
 					<label for="RegisterEmail">Email</label>

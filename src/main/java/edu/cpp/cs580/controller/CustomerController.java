@@ -48,7 +48,7 @@ public class CustomerController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/cs580/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/cs580/register", method = RequestMethod.POST)
 	ModelAndView showExistPage(@ModelAttribute("customer") Customer customer, Model m) {
 		List<Customer> customerList = customerRepository.findAll();
 
