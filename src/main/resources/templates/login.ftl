@@ -64,6 +64,16 @@
 					<label for="RepeatPassword">Repeat Password</label>
 					<div class="bar"></div>
 				</div>
+				<div class="input-container">
+					<@spring.formInput "customer.firstName" />
+					<label for="firstName">First name</label>
+					<div class="bar"></div>
+				</div>
+				<div class="input-container">
+					<@spring.formInput "customer.lastName" />
+					<label for="lastName">Last name</label>
+					<div class="bar"></div>
+				</div>
 				<div class="button-container">
 					<button type="submit"><span>Next</span></button>
 				</div>

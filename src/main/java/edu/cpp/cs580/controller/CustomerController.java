@@ -64,7 +64,9 @@ public class CustomerController {
 			}
 		}
 		customerRepository.save(customer);
-		ModelAndView modelAndView = new ModelAndView("customerAdded");
+		ModelAndView modelAndView = new ModelAndView("userHomepage");
+		modelAndView.addObject("title", "User Home Page");
+		modelAndView.addObject("userFirstName", customer.getFirstName());
 		return modelAndView;
 	}
 }
