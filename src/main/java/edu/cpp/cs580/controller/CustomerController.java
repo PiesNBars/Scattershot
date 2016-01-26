@@ -50,8 +50,21 @@ public class CustomerController {
 
 	@RequestMapping(value = "/cs580/login", method = RequestMethod.POST)
 	ModelAndView showExistPage(@ModelAttribute("customer") Customer customer, Model m) {
-		ModelAndView modelAndView = new ModelAndView("customerExist");
-		System.out.println("dup email: " + customer.getEmail());
+		List<Customer> customerList = customerRepository.findAll();
+
+		System.out.println("spring customer email: " + customer.getEmail());
+		System.out.println("spring customer password: " + customer.getPassword());
+
+		for (Customer c : customerList) {
+			String customerEmail = c.getEmail();
+
+			if (customerEmail.equals(customer.getEmail())) {
+				ModelAndView modelAndView = new ModelAndView("customerExist");
+				return modelAndView;
+			}
+		}
+		customerRepository.save(customer);
+		ModelAndView modelAndView = new ModelAndView("customerAdded");
 		return modelAndView;
 	}
 }

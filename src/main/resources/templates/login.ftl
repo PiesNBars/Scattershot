@@ -54,7 +54,7 @@
 					<div class="bar"></div>
 				</div>
 				<div class="input-container">
-					<@spring.formPasswordInput "customer.password" />
+					<@spring.formPasswordInput 'customer.password'/>
 					<label for="RegisterPassword">Password</label>
 					<div class="bar"></div>
 				</div>
