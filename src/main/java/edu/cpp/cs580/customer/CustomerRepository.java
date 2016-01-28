@@ -10,6 +10,7 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
 	public Customer findByFirstName(@Param("firstName") String firstName);
 	public Customer findByLastName(@Param("lastName") String lastName);
 	public Customer findById(@Param("id") String id);
+	public Customer findByEmail(@Param("email") String email);
 	public List<Customer> findAllByFirstName(@Param("firstName") String firstName);
 	public List<Customer> findAllByLastName(@Param("lastName") String lastName);
 }

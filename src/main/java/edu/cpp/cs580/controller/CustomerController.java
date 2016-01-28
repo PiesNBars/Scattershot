@@ -40,12 +40,40 @@ public class CustomerController {
 		return "false";
 	}
 
-	@RequestMapping(value = "/cs580/login", method = RequestMethod.GET)
+	@RequestMapping(value = "/cs580/main", method = RequestMethod.GET)
 	ModelAndView getLoginPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("login");
 		modelAndView.addObject("title", "login page title");
 		m.addAttribute("customer", new Customer());
 		return modelAndView;
+	}
+
+	@RequestMapping(value = "/cs580/login", method = RequestMethod.POST)
+	ModelAndView showLandingPage(@ModelAttribute("customer") Customer customer, Model m) {
+		System.out.println("customer email: " + customer.getEmail());
+
+		Customer c = customerRepository.findByEmail(customer.getEmail());
+
+		if (c == null) {
+			ModelAndView modelAndView = new ModelAndView("userNotFoundPage");
+			modelAndView.addObject("title", "User Not Found Page");
+			modelAndView.addObject("userEmail", customer.getEmail());
+			return modelAndView;
+		}
+		else {
+			if (c.getPassword().equals(customer.getPassword())) {
+				ModelAndView modelAndView = new ModelAndView("userHomepage");
+				modelAndView.addObject("title", "User Home Page");
+				modelAndView.addObject("userFirstName", c.getFirstName());
+				return modelAndView;
+			}
+			else {
+				ModelAndView modelAndView = new ModelAndView("forgotPasswordPage");
+				modelAndView.addObject("title", "Forgot Password");
+				modelAndView.addObject("message", c.getEmail() + " and password does not match, please retry or recovery your password.");
+				return modelAndView;
+			}
+		}
 	}
 
 	@RequestMapping(value = "/cs580/register", method = RequestMethod.POST)
@@ -54,6 +82,8 @@ public class CustomerController {
 
 		System.out.println("spring customer email: " + customer.getEmail());
 		System.out.println("spring customer password: " + customer.getPassword());
+		System.out.println("spring customer firstName: " + customer.getFirstName());
+		System.out.println("spring customer lastname: " + customer.getLastName());
 
 		for (Customer c : customerList) {
 			String customerEmail = c.getEmail();
