@@ -8,7 +8,7 @@
 <body>
 
    <div> Customer Exist! </div>
-
+	<div> <a href="/cs580/main" class="button">Go to Main</a> </div>
 </body>
 
 </html>
