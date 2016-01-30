@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -35,37 +35,37 @@ public class CSVMapper {
 	public static CustomerDataset mapCSV(MultipartFile file)
 			throws Exception {
 		
-		List<Map<String, String>> table = new ArrayList<>();
+		List<Map<String, ? extends Serializable>> table = new ArrayList<>();
 		InputStream in = file.getInputStream();
 		InputStreamReader reader = new InputStreamReader(in, CHAR_FORMAT);
 		CSVFormat format = CSVFormat.RFC4180;
 		CSVParser parser = new CSVParser(reader, format);
-		Set<String> header = parser.getHeaderMap().keySet();
 
-		for(CSVRecord tuple : parser)
+		for(CSVRecord tuple : parser) {
 			table.add(tuple.toMap());
+			
+		}
 		
 		parser.close();
 		
-		return new CustomerDataset(table, header);
+		return new CustomerDataset(table);
 	}
 	
 	public static CustomerDataset mapCSV(MultipartFile file,
 			String[] columnNames) throws Exception {
 
-		List<Map<String, String>> table = new ArrayList<>();
+		List<Map<String, ? extends Serializable>> table = new ArrayList<>();
 		InputStream in = file.getInputStream();
 		InputStreamReader reader = new InputStreamReader(in, CHAR_FORMAT);
 		CSVFormat format = CSVFormat.RFC4180.withHeader(columnNames);
 		CSVParser parser = new CSVParser(reader, format);
-		Set<String> header = parser.getHeaderMap().keySet();
 		
 		for(CSVRecord tuple : parser)
 			table.add(tuple.toMap());
 		
 		parser.close();
 		
-		return new CustomerDataset(table, header);
+		return new CustomerDataset(table);
 	}
 	
 	private static String[] generateHeader(int columns) {

@@ -1,6 +1,8 @@
 package edu.cpp.cs580.customer.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,18 +20,18 @@ public class CustomerDataset {
 	private String id;
 	private String customerId;
 	private String name;
-	private Set<String> header;
-	private List<Map<String, String>> dataset;
+	private Map<String, String> typeMap;
+	private List<Map<String, ? extends Serializable>> dataset;
 	
-	public CustomerDataset() {
-		dataset = new ArrayList<Map<String, String>>();
-		header = null;
-		name = null;
+	public CustomerDataset(List<Map<String, ? extends Serializable>> dataset) {
+		this.dataset = dataset;
+		typeMap = createTypeMap(dataset);
 	}
 	
-	public CustomerDataset(List<Map<String,String>> dataset, Set<String> header) {
+	public CustomerDataset(List<Map<String, ? extends Serializable>> dataset,
+			Map<String, String> header) {
 		this.dataset = dataset;
-		this.header = header;
+		this.typeMap = header;
 	}
 	
 	public String getId() {
@@ -48,12 +50,13 @@ public class CustomerDataset {
 		this.customerId = customerId;
 	}
 	
-	public List<Map<String, String>> getDataset() {
+	public List<Map<String, ? extends Serializable>> getDataset() {
 		return dataset;
 	}
 	
-	public void setDataset(List<Map<String, String>> dataset) {
+	public void setDataset(List<Map<String, ? extends Serializable>> dataset) {
 		this.dataset = dataset;
+		typeMap = createTypeMap(dataset);
 	}
 
 	public String getName() {
@@ -65,21 +68,45 @@ public class CustomerDataset {
 	}
 
 	public Set<String> getHeader() {
-		return header;
-	}
-
-	public void setHeader(Set<String> header) {
-		this.header = header;
+		return typeMap.keySet();
 	}
 	
 	public void insertRow(Map<String, String> row) {
 		dataset.add(row);
 	}
+
+	public List<String> push(Map<String, ? extends Serializable> row) {
+		Iterator<String> keys = row.keySet().iterator();
+		List<String> wrongTypes = new ArrayList<String>();
+		String key;
+		while(keys.hasNext()) {
+			key = keys.next();
+			Serializable value = row.get(key);
+			
+			try {
+
+				Class<?> clazz = Class.forName(typeMap.get(key));
+				clazz.cast(value);
+			} catch (ClassCastException cce) {
+				row.put(key, null);
+				wrongTypes.add(key);
+			} catch (ClassNotFoundException cnfe) {
+				cnfe.printStackTrace();
+			}
+		}
+		
+		if(!(wrongTypes.size() > 0))
+			dataset.add(row);
+		
+		return wrongTypes;
+	}
 	
-	public <T> List<Map<String, T>> map(Mappable<Map<String, String>, Map<String, T>> func) {
-		List<Map<String, T>> mappingResult = new ArrayList<>();
-		Iterator<Map<String, String>> data = dataset.iterator();
-		Map<String, T> resultRow = null;
+	public List<Map<String, ? extends Serializable>> map(
+			Mappable<Map<String, ? extends Serializable>, Map<String, ? extends Serializable>> func) {
+		
+		List<Map<String, ? extends Serializable>> mappingResult = new ArrayList<>();
+		Iterator<Map<String, ? extends Serializable>> data = dataset.iterator();
+		Map<String, ? extends Serializable> resultRow = null;
 				
 		while(data.hasNext()){
 			resultRow = func.withArgument(data.next()).call();
@@ -90,22 +117,25 @@ public class CustomerDataset {
 	}
 	
 	public CustomerDataset getColumns(String... columnNames) {
-		Set<String> columnSet = new HashSet<>();
+
+		Map<String, String> columns = new HashMap<>(typeMap);
+		Set<String> subset = new HashSet<>(Arrays.asList(columnNames));
+		Set<String> superset = columns.keySet();
 		
-		for(String column : columnNames)
-			if(header.contains(column))
-				columnSet.add(column);
+		for(String column : superset)
+			if(!(subset.contains(column)))
+				columns.remove(column);
 		
-		return getColumns(columnSet);
+		return getColumns(columns);
 	}
 	
-	public CustomerDataset getColumns(Set<String> columnNames) {
-		Slice slice = new Slice(columnNames);
-		List<Map<String, String>> dataSlice = map(slice);
-		CustomerDataset result = new CustomerDataset();
+	public CustomerDataset getColumns(Map<String, String> columnNames) {
+		Slice slice = new Slice(columnNames.keySet());
+		List<Map<String, ? extends Serializable>> dataSlice = map(slice);
+		CustomerDataset result = new CustomerDataset(dataSlice);
 		
 		result.dataset = dataSlice;
-		result.header = columnNames;
+		result.typeMap = columnNames;
 		result.id = id;
 		result.name = name;
 		result.customerId = customerId;
@@ -113,29 +143,47 @@ public class CustomerDataset {
 		return result;
 	}
 	
-	public class Slice implements Mappable<Map<String, String>, Map<String, String>> {
+	public class Slice implements Mappable<Map<String, ? extends Serializable>, Map<String, ? extends Serializable>> {
 		
 		private Set<String> columns;
-		private Map<String, String> arg;
+		private Map<String, ? extends Serializable> arg;
 		
 		public Slice(Set<String> columns) {
 			this.columns = columns;
 		}
 		
-		public Slice withArgument(Map<String, String> arg) {
+		public Slice withArgument(Map<String, ? extends Serializable> arg) {
 			this.arg = arg;
 			return this;
 		}
 		
-		public Map<String, String> call() {
+		public Map<String, ? extends Serializable> call() {
 			if(arg == null)
 				return null;
 			
-			Map<String, String> result = new HashMap<>();
-			for(String column : columns)
-				result.put(column, arg.get(column));
+			Map<String, ? extends Serializable> result = new HashMap<>(arg);
+			Set<String> allColumns = typeMap.keySet();
+			for(String column : allColumns)
+				if(!(columns.contains(column)))
+				result.remove(column);
 			
 			return result;
 		}
+	}
+	
+	private Map<String, String> createTypeMap(List<Map<String, ? extends Serializable>> data) {
+		
+		Map<String, String> newTypeMap = new HashMap<>();
+		
+		if(data != null && data.size() > 0) {
+			Map<String, ? extends Serializable> firstRow = data.get(0);
+			Set<String> columns = firstRow.keySet();
+			
+			for(String columnName : columns) {
+				newTypeMap.put(columnName, firstRow.get(columnName).getClass().getCanonicalName());
+			}
+		}
+		
+		return newTypeMap;
 	}
 }
