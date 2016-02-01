@@ -59,13 +59,13 @@ public class TypeParser {
 		}
 		
 		try {
-			Long value = Long.parseLong(string);
-			return new ParseResult<Long>(value);
+			Number value = Long.parseLong(string);
+			return new ParseResult<Number>(value);
 		} catch (NumberFormatException nfe) {}
 		
 		try {
-			Double value = Double.parseDouble(string);
-			return new ParseResult<Double>(value);
+			Number value = Double.parseDouble(string);
+			return new ParseResult<Number>(value);
 		} catch (NumberFormatException nfe) {}
 		
 		return new ParseResult<String>(string);
