@@ -38,7 +38,7 @@ public class CSVMapper {
 		List<Map<String, ? extends Serializable>> table = new ArrayList<>();
 		InputStream in = file.getInputStream();
 		InputStreamReader reader = new InputStreamReader(in, CHAR_FORMAT);
-		CSVFormat format = CSVFormat.RFC4180;
+		CSVFormat format = CSVFormat.RFC4180.withHeader();
 		CSVParser parser = new CSVParser(reader, format);
 
 		for(CSVRecord tuple : parser) {

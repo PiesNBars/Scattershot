@@ -49,7 +49,7 @@ public class DatasetController {
     		@RequestParam("hasOwnHeaders") String hasHeaderRow){
     	
     	String[] columnNames = null;
-    	boolean hasHeader = hasHeaderRow == "true" ? true : false;
+    	boolean hasHeader = hasHeaderRow.compareTo("true") == 0 ? true : false;
     	
     	if(header != null && header.length() > 0)
     		columnNames = header.split(",");
