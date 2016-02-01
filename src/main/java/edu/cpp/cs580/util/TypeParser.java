@@ -9,49 +9,43 @@ import java.util.ArrayList;
 
 public class TypeParser {
 	
-	private static final String A_SLSH_DT = "MM/DD/YYYY";
-	private static final String A_SPC_DT = "MM DD YYYY";
-	private static final String E_SLSH_DT = "DD/MM/YYYY";
-	private static final String E_SPC_DT = "DD MM YYYY";
-	private static final String TIME_OF_DAY = "HH:mm:ss";
-	private static final DateFormat AMERICAN_SLASH_DATE;
-	private static final DateFormat AMERICAN_SPACE_DATE;
-	private static final DateFormat EUROPEAN_SLASH_DATE;
-	private static final DateFormat EUROPEAN_SPACE_DATE;
-	private static final DateFormat A_SLSH_DT_W_TIME;
-	private static final DateFormat A_SPC_DT_W_TIME;
-	private static final DateFormat E_SLSH_DT_W_TIME;
-	private static final DateFormat E_SPC_DT_W_TIME;
+	private static final String TIME = "HH:mm:ss";
+	private static final String DATE_SLASH = "yyyy/MM/dd";
+	private static final String DATE_DASH = "yyyy-MM-dd";
+	private static final String DATE_SPACE = "yyyy MM dd";
+	private static final DateFormat D_SLSH;
+	private static final DateFormat D_DSH;
+	private static final DateFormat D_SPC;
+	private static final DateFormat D_SLSH_W_TIME;
+	private static final DateFormat D_DSH_W_TIME;
+	private static final DateFormat D_SPC_W_TIME;
 	private static final DateFormat TIMESTAMP = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	private static final ArrayList<DateFormat> FORMATS;
 			
 	static {
-		AMERICAN_SLASH_DATE = new SimpleDateFormat(A_SLSH_DT);
-		AMERICAN_SPACE_DATE = new SimpleDateFormat(A_SPC_DT);
-		EUROPEAN_SLASH_DATE = new SimpleDateFormat(E_SLSH_DT);
-		EUROPEAN_SPACE_DATE = new SimpleDateFormat(E_SPC_DT);
-		A_SLSH_DT_W_TIME = new SimpleDateFormat(String.format("%s %s", A_SLSH_DT, TIME_OF_DAY));
-		A_SPC_DT_W_TIME = new SimpleDateFormat(String.format("%s %s", A_SPC_DT, TIME_OF_DAY));
-		E_SLSH_DT_W_TIME = new SimpleDateFormat(String.format("%s %s", E_SLSH_DT, TIME_OF_DAY));
-		E_SPC_DT_W_TIME = new SimpleDateFormat(String.format("%s %s", E_SPC_DT, TIME_OF_DAY));
+		D_SLSH = new SimpleDateFormat(DATE_SLASH);
+		D_DSH = new SimpleDateFormat(DATE_DASH);
+		D_SPC = new SimpleDateFormat(DATE_SPACE);
+		D_SLSH_W_TIME = new SimpleDateFormat(DATE_SLASH + " " + TIME);
+		D_DSH_W_TIME = new SimpleDateFormat(DATE_DASH + " " + TIME);
+		D_SPC_W_TIME = new SimpleDateFormat(DATE_SPACE + " " + TIME);
 		
 		FORMATS = new ArrayList<DateFormat>();
-		FORMATS.add(AMERICAN_SLASH_DATE);
-		FORMATS.add(AMERICAN_SPACE_DATE);
-		FORMATS.add(A_SLSH_DT_W_TIME);
-		FORMATS.add(A_SPC_DT_W_TIME);
-		FORMATS.add(EUROPEAN_SLASH_DATE);
-		FORMATS.add(EUROPEAN_SPACE_DATE);
-		FORMATS.add(E_SLSH_DT_W_TIME);
-		FORMATS.add(E_SPC_DT_W_TIME);
 		FORMATS.add(TIMESTAMP);
+		FORMATS.add(D_SLSH_W_TIME);
+		FORMATS.add(D_DSH_W_TIME);
+		FORMATS.add(D_SPC_W_TIME);
+		FORMATS.add(D_SLSH);
+		FORMATS.add(D_DSH);
+		FORMATS.add(D_SPC);
 	}
 	
 	public static ParseResult<? extends Serializable> parse(String string) {
 		
 		// Check if string fits a date format.
-		for(DateFormat format : FORMATS) {
+		for(int i = 0; i < FORMATS.size(); i++) {
 			try {
+				DateFormat format = FORMATS.get(i);
 				Date date = format.parse(string);
 				if(date != null)
 					return new ParseResult<Date>(date);

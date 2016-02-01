@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,8 +44,14 @@ public class CSVMapper {
 		CSVParser parser = new CSVParser(reader, format);
 
 		for(CSVRecord tuple : parser) {
-			table.add(tuple.toMap());
+			Map<String, String> row = tuple.toMap();
+			Map<String, Serializable> newRow = new HashMap<>();
 			
+			for(String column : row.keySet()) {
+				ParseResult<?> parsedValue = TypeParser.parse(row.get(column));
+				newRow.put(column, parsedValue.getValue());
+			}
+			table.add(newRow);
 		}
 		
 		parser.close();
@@ -60,12 +68,24 @@ public class CSVMapper {
 		CSVFormat format = CSVFormat.RFC4180.withHeader(columnNames);
 		CSVParser parser = new CSVParser(reader, format);
 		
-		for(CSVRecord tuple : parser)
-			table.add(tuple.toMap());
+		for(CSVRecord tuple : parser) {
+			Map<String, String> row = tuple.toMap();
+			Map<String, Serializable> newRow = new HashMap<>();
+			
+			for(String column : row.keySet()) {
+				ParseResult<?> parsedValue = TypeParser.parse(row.get(column));
+				newRow.put(column, parsedValue.getValue());
+			}
+			table.add(newRow);
+		}
 		
 		parser.close();
 		
 		return new CustomerDataset(table);
+	}
+	
+	private static <T extends Serializable> T classCastHelper(T obj, Class<T> clazz) {
+		return clazz.cast(obj);
 	}
 	
 	private static String[] generateHeader(int columns) {
@@ -93,6 +113,15 @@ public class CSVMapper {
 		input.close();
 		
 		return cols;
+	}
+	
+	private static Map<String, Class<? extends Serializable>> parseColumnTypes(Map<String, String> sampleRow) {
+		Map<String, Class<? extends Serializable>> typeMap = new HashMap<>();
+		
+		for(String columnName : sampleRow.keySet())
+			typeMap.put(columnName, TypeParser.parse(sampleRow.get(columnName)).getClazz());
+		
+		return typeMap;
 	}
 	
 	private static int countChars(String s, char c) {
