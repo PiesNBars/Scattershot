@@ -13,6 +13,7 @@ import java.util.Set;
 import org.springframework.data.annotation.Id;
 
 import edu.cpp.cs580.util.Mappable;
+import edu.cpp.cs580.util.Reduceable;
 
 public class CustomerDataset {
 
@@ -23,15 +24,17 @@ public class CustomerDataset {
 	private Map<String, String> typeMap;
 	private List<Map<String, ? extends Serializable>> dataset;
 	
+	public CustomerDataset(){};
+	
 	public CustomerDataset(List<Map<String, ? extends Serializable>> dataset) {
 		this.dataset = dataset;
 		typeMap = createTypeMap(dataset);
 	}
 	
 	public CustomerDataset(List<Map<String, ? extends Serializable>> dataset,
-			Map<String, String> header) {
+			Map<String, String> typeMap) {
 		this.dataset = dataset;
-		this.typeMap = header;
+		this.typeMap = typeMap;
 	}
 	
 	public String getId() {
@@ -66,8 +69,16 @@ public class CustomerDataset {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Map<String, String> getTypeMap() {
+		return typeMap;
+	}
+	
+	public void setTypeMap(Map<String, String> typeMap) {
+		this.typeMap = typeMap;
+	}
 
-	public Set<String> getHeader() {
+	public Set<String> typeMap() {
 		return typeMap.keySet();
 	}
 	
@@ -114,6 +125,11 @@ public class CustomerDataset {
 		}
 		
 		return mappingResult;
+	}
+	
+	public <T> T reduce(Reduceable<CustomerDataset, T> reduceFunc,
+			String... columns) {
+		return reduceFunc.withArgument(this).call();
 	}
 	
 	public CustomerDataset getColumns(String... columnNames) {
