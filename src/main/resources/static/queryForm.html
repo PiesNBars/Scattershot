@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<form method="GET" enctype="multipart/form-data"
+		action="/upload">
+		Customer: <input type="text" name="id"/><br/>
+		Is this data being aggregated?:
+		<input type="radio" name="aggregate" value="true"/>Yes
+		<input type="radio" name="aggregate" value="false" checked/>No<br/>
+		Bins: <input type="number" name="bins"/><br/>
+		Column: <input type="text" name="columns"/><br/>
+		Name: <input type="text" name="name"><br /> <br />
+		<input type="submit" value="Upload"> Press here to upload the file!
+	</form>
+</body>
+</html>
