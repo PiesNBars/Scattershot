@@ -137,10 +137,13 @@ public class CustomerDataset {
 		Map<String, String> columns = new HashMap<>(typeMap);
 		Set<String> subset = new HashSet<>(Arrays.asList(columnNames));
 		Set<String> superset = columns.keySet();
+		String[] supersetKeys = superset.toArray(new String[superset.size()]);
 		
-		for(String column : superset)
+		for(int i = 0; i < supersetKeys.length; i++) {
+			String column = supersetKeys[i];
 			if(!(subset.contains(column)))
 				columns.remove(column);
+		}
 		
 		return getColumns(columns);
 	}
