@@ -121,10 +121,10 @@ public class DatasetController {
     		Map<String, Serializable> finalRow = new HashMap<>();
     		PriorityQueue<Number> sortedValues = new PriorityQueue<>();
     		Number max = null;
-    		Double prevBound = null;
+    		Double prevBound = Double.NEGATIVE_INFINITY ;
     		Double nextBound = null;
     		Stack<Double> boundries = null;
-    		int currentCount = 0;
+			Integer currentCount = null;
     		
     		for(Map<String, ? extends Serializable> row : data) {
     			try {
@@ -137,23 +137,24 @@ public class DatasetController {
     		boundries = getBinBoundries(sortedValues.peek().doubleValue(), max.doubleValue());
     		
     		while(!boundries.empty()) {
-    			if(sortedValues.peek().doubleValue() >= nextBound) {
-    				Map<String, Serializable> newRow = new HashMap<>();
-    				
-    				nextBound = boundries.pop();
-    				newRow.put("key", "[" + prevBound + "," + nextBound + ")");
-    				newRow.put("value", currentCount);
-    				currentCount = 0;
-    				prevBound = nextBound;
-    				aggregateData.add(newRow);
-    			} else {
-    				currentCount++;
+    			Map<String, Serializable> nextRow = new HashMap<>();
+    			currentCount = 0;
+    			nextBound = boundries.pop();
+    			
+    			while(sortedValues.peek().doubleValue() < nextBound) {
     				sortedValues.poll();
+    				currentCount++;
     			}
+    			
+    			nextRow.put("key", "[" + prevBound + "," + currentCount + ")");
+    			nextRow.put("value", currentCount);
+    			aggregateData.add(nextRow);
+    			prevBound = nextBound;
     		}
     		
     		finalRow.put("key", "[" + prevBound + "," + max + "]");
     		finalRow.put("value", sortedValues.size());
+    		aggregateData.add(finalRow);
     		
     		return new CustomerDataset(aggregateData);
     	}
