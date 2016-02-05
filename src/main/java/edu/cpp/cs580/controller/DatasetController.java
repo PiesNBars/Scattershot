@@ -4,9 +4,11 @@ package edu.cpp.cs580.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,21 +41,25 @@ public class DatasetController {
 			@RequestParam(required=false, value="bins") Integer bins,
 			@RequestParam(value="aggregate") String aggregate) throws Exception {
 		
-		boolean agg = aggregate.compareTo("true") == 0 ? true : false;
-		
 		if(customerId.isEmpty())
 			return "You didn't provide a customer Id!";
 		if(datasetName.isEmpty())
 			return "You didn't provide a dataset name!";
 
+		Boolean agg = aggregate.compareTo("true") == 0 ? true : false;
 		String[] variables = columns.split(",");
+		CustomerDataset resultset = null;
 		CustomerDataset dataset = datasetRepository
 				.findByCustomerIdAndName(customerId, datasetName);
-		CustomerDataset resultset = dataset.getColumns(variables);
 		
 		if(agg && bins != null) {
 			ToHistogram toHistogram = new ToHistogram(variables[0], bins);
 			resultset = dataset.reduce(toHistogram);
+		} else if (agg) {
+			ToBarChart toBarChart = new ToBarChart(variables[0]);
+			resultset = dataset.reduce(toBarChart);
+		} else {
+			resultset = dataset.getColumns(variables);
 		}
 		
 		return objectMapper.writeValueAsString(resultset);
@@ -99,6 +105,57 @@ public class DatasetController {
         }
     }
     
+    public class ToBarChart implements Reduceable<CustomerDataset, CustomerDataset> {
+    	
+    	private String column;
+    	private CustomerDataset rawData;
+    	
+    	public ToBarChart(String column) {
+    		this.column = column;
+    	}
+    	
+    	public ToBarChart withArgument(CustomerDataset rawData) {
+    		this.rawData = rawData;
+    		return this;
+    	}
+    	
+    	public CustomerDataset call() {
+    		
+    		List<Map<String, ? extends Serializable>> data = rawData.getDataset();
+    		Map<String, Integer> barCounts = new HashMap<>();
+    		String nextValue = null;
+    		Integer currentCount = null;
+    		
+    		for(Map<String, ? extends Serializable> row : data) {
+    			nextValue = String.class.cast(row.get(column));
+    			currentCount = barCounts.get(nextValue);
+    			
+    			if(currentCount == null) {
+    				barCounts.put(nextValue, 1);
+    			} else {
+    				barCounts.put(nextValue, currentCount + 1);
+    			}
+    		}
+    		
+    		return listify(barCounts);
+    	}
+    	
+    	private CustomerDataset listify(Map<String, Integer> barCounts) {
+    		Map<String, Serializable> nextRow = new HashMap<>();
+    		List<Map<String, ? extends Serializable>> aggData = new ArrayList<>();
+    		
+    		for(String key : barCounts.keySet()) {
+    			nextRow = new HashMap<>();
+    			nextRow.put("key", key);
+    			nextRow.put("value", barCounts.get(key));
+    			
+    			aggData.add(nextRow);
+    		}
+    		
+    		return new CustomerDataset(aggData);
+    	}
+    }
+    
     public class ToHistogram implements Reduceable<CustomerDataset, CustomerDataset> {
     	
     	private int bins;
@@ -116,6 +173,7 @@ public class DatasetController {
     	}
     	
     	public CustomerDataset call() {
+    		
     		List<Map<String, ? extends Serializable>> data = rawData.getDataset();
     		List<Map<String, ? extends Serializable>> aggregateData = new ArrayList<>();
     		Map<String, Serializable> finalRow = new HashMap<>();
