@@ -6,8 +6,8 @@
 </head>
 <body>
 	
-	<#if 1==1>
-		test("${dataset?json_string}");
-	</#if>
 </body>
+<script>
+	test("${dataset?json_string}");
+</script>
 </html>
