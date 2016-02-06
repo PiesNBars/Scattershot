@@ -12,12 +12,14 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,7 +29,7 @@ import edu.cpp.cs580.customer.data.DatasetRepository;
 import edu.cpp.cs580.util.CSVMapper;
 import edu.cpp.cs580.util.Reduceable;
 
-@RestController
+@Controller
 public class DatasetController {
 	
 	@Autowired private DatasetRepository datasetRepository;
@@ -35,16 +37,16 @@ public class DatasetController {
 	@Autowired private ObjectMapper objectMapper;
 	
 	@RequestMapping(value="/upload", method=RequestMethod.GET)
-	public @ResponseBody String getDataset(@RequestParam("id") String customerId,
+	public ModelAndView getDataset(@RequestParam("id") String customerId,
 			@RequestParam("name") String datasetName,
 			@RequestParam("columns") String columns,
 			@RequestParam(required=false, value="bins") Integer bins,
 			@RequestParam(value="aggregate") String aggregate) throws Exception {
 		
 		if(customerId.isEmpty())
-			return "You didn't provide a customer Id!";
+			return new ModelAndView("error");
 		if(datasetName.isEmpty())
-			return "You didn't provide a dataset name!";
+			return new ModelAndView("error");
 
 		Boolean agg = aggregate.compareTo("true") == 0 ? true : false;
 		String[] variables = columns.split(",");
@@ -62,7 +64,14 @@ public class DatasetController {
 			resultset = dataset.getColumns(variables);
 		}
 		
-		return objectMapper.writeValueAsString(resultset);
+		String json = objectMapper.writeValueAsString(resultset.getDataset());
+		
+		
+		ModelAndView chartPage = new ModelAndView("chart");
+		chartPage.addObject("dataset", json);
+		
+		return chartPage;
+//		return objectMapper.writeValueAsString(resultset);
 	}
 
     @RequestMapping(value="/upload", method=RequestMethod.POST)
