@@ -1,5 +1,4 @@
 function test (data) {
-	debugger;
 	var obj = JSON.parse(data);
-	debugger;
+	$.scattershot.barChart.create(obj, 1020, 550, null);
 }
