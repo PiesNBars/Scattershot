@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class CustomerController {
 	@Autowired private CustomerRepository customerRepository;
 
+// Not Used, serves as example for RequestParam
 	@RequestMapping(value = "/customer/checkExist", method = RequestMethod.POST)
 	String existCheck(@RequestParam("email") String email) {
 		List<Customer> customerList = customerRepository.findAll();
@@ -49,7 +51,7 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = "/cs580/login", method = RequestMethod.POST)
-	ModelAndView loginAction(@ModelAttribute("customer") Customer customer, Model m) {
+	ModelAndView loginAction(@ModelAttribute("customer") Customer customer) {
 		System.out.println("customer email: " + customer.getEmail());
 
 		Customer c = customerRepository.findByEmail(customer.getEmail());
@@ -78,7 +80,7 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = "/cs580/register", method = RequestMethod.POST)
-	ModelAndView registerAction(@ModelAttribute("customer") Customer customer, Model m) {
+	ModelAndView registerAction(@ModelAttribute("customer") Customer customer) {
 		List<Customer> customerList = customerRepository.findAll();
 
 		System.out.println("spring customer email: " + customer.getEmail());
@@ -105,6 +107,15 @@ public class CustomerController {
 	ModelAndView getUploadPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("uploadPage");
 		modelAndView.addObject("title", "upload page title");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/{customerId}/displayChartsList", method = RequestMethod.GET)
+	ModelAndView displayChartsList(@PathVariable("customerId") String customerID) {
+		ModelAndView modelAndView = new ModelAndView("displayChartsListPage");
+		modelAndView.addObject("title", "Charts List Display Page");
+		modelAndView.addObject("customerID", customerID);
+
 		return modelAndView;
 	}
 }
