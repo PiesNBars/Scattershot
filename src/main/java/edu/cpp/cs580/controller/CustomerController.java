@@ -49,7 +49,7 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = "/cs580/login", method = RequestMethod.POST)
-	ModelAndView showLandingPage(@ModelAttribute("customer") Customer customer, Model m) {
+	ModelAndView loginAction(@ModelAttribute("customer") Customer customer, Model m) {
 		System.out.println("customer email: " + customer.getEmail());
 
 		Customer c = customerRepository.findByEmail(customer.getEmail());
@@ -65,6 +65,7 @@ public class CustomerController {
 				ModelAndView modelAndView = new ModelAndView("userHomepage");
 				modelAndView.addObject("title", "User Home Page");
 				modelAndView.addObject("userFirstName", c.getFirstName());
+				modelAndView.addObject("customer", c);
 				return modelAndView;
 			}
 			else {
@@ -77,7 +78,7 @@ public class CustomerController {
 	}
 
 	@RequestMapping(value = "/cs580/register", method = RequestMethod.POST)
-	ModelAndView showExistPage(@ModelAttribute("customer") Customer customer, Model m) {
+	ModelAndView registerAction(@ModelAttribute("customer") Customer customer, Model m) {
 		List<Customer> customerList = customerRepository.findAll();
 
 		System.out.println("spring customer email: " + customer.getEmail());
@@ -97,6 +98,13 @@ public class CustomerController {
 		ModelAndView modelAndView = new ModelAndView("userHomepage");
 		modelAndView.addObject("title", "User Home Page");
 		modelAndView.addObject("userFirstName", customer.getFirstName());
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/cs580/upload", method = RequestMethod.GET)
+	ModelAndView getUploadPage(Model m) {
+		ModelAndView modelAndView = new ModelAndView("uploadPage");
+		modelAndView.addObject("title", "upload page title");
 		return modelAndView;
 	}
 }
