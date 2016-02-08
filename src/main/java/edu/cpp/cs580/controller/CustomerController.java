@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -106,6 +107,15 @@ public class CustomerController {
 	ModelAndView getUploadPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("uploadPage");
 		modelAndView.addObject("title", "upload page title");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/{customerId}/displayChartsList", method = RequestMethod.GET)
+	ModelAndView displayChartsList(@PathVariable("customerId") String customerID) {
+		ModelAndView modelAndView = new ModelAndView("displayChartsListPage");
+		modelAndView.addObject("title", "Charts List Display Page");
+		modelAndView.addObject("customerID", customerID);
+
 		return modelAndView;
 	}
 }
