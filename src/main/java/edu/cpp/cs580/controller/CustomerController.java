@@ -81,20 +81,12 @@ public class CustomerController {
 
 	@RequestMapping(value = "/cs580/register", method = RequestMethod.POST)
 	ModelAndView registerAction(@ModelAttribute("customer") Customer customer) {
-		List<Customer> customerList = customerRepository.findAll();
+		Customer c = customerRepository.findByEmail(customer.getEmail());
 
-		System.out.println("spring customer email: " + customer.getEmail());
-		System.out.println("spring customer password: " + customer.getPassword());
-		System.out.println("spring customer firstName: " + customer.getFirstName());
-		System.out.println("spring customer lastname: " + customer.getLastName());
+		if (c != null) {
+			ModelAndView modelAndView = new ModelAndView("customerExist");
 
-		for (Customer c : customerList) {
-			String customerEmail = c.getEmail();
-
-			if (customerEmail.equals(customer.getEmail())) {
-				ModelAndView modelAndView = new ModelAndView("customerExist");
-				return modelAndView;
-			}
+			return modelAndView;
 		}
 		customerRepository.save(customer);
 		ModelAndView modelAndView = new ModelAndView("userHomepage");
