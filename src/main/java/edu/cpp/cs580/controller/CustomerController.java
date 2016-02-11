@@ -8,6 +8,8 @@ package edu.cpp.cs580.controller;
 
 import edu.cpp.cs580.customer.Customer;
 import edu.cpp.cs580.customer.CustomerRepository;
+import edu.cpp.cs580.customer.data.CustomerDataset;
+import edu.cpp.cs580.customer.data.DatasetRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class CustomerController {
 	@Autowired private CustomerRepository customerRepository;
+	@Autowired private DatasetRepository datasetRepository;
 
 // Not Used, serves as example for RequestParam
 	@RequestMapping(value = "/customer/checkExist", method = RequestMethod.POST)
@@ -45,8 +48,11 @@ public class CustomerController {
 	@RequestMapping(value = "/cs580/main", method = RequestMethod.GET)
 	ModelAndView getLoginPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("login");
+
 		modelAndView.addObject("title", "login page title");
+
 		m.addAttribute("customer", new Customer());
+
 		return modelAndView;
 	}
 
@@ -58,22 +64,32 @@ public class CustomerController {
 
 		if (c == null) {
 			ModelAndView modelAndView = new ModelAndView("userNotFoundPage");
+
 			modelAndView.addObject("title", "User Not Found Page");
 			modelAndView.addObject("userEmail", customer.getEmail());
+
 			return modelAndView;
 		}
 		else {
 			if (c.getPassword().equals(customer.getPassword())) {
 				ModelAndView modelAndView = new ModelAndView("userHomepage");
+
 				modelAndView.addObject("title", "User Home Page");
 				modelAndView.addObject("userFirstName", c.getFirstName());
 				modelAndView.addObject("customer", c);
+
 				return modelAndView;
 			}
 			else {
-				ModelAndView modelAndView = new ModelAndView("forgotPasswordPage");
+				ModelAndView modelAndView = new ModelAndView(
+					"forgotPasswordPage");
+
 				modelAndView.addObject("title", "Forgot Password");
-				modelAndView.addObject("message", c.getEmail() + " and password does not match, please retry or recovery your password.");
+				modelAndView.addObject(
+					"message",
+					c.getEmail() + " and password does not match, please retry"
+						+ " or recovery your password.");
+
 				return modelAndView;
 			}
 		}
@@ -81,41 +97,51 @@ public class CustomerController {
 
 	@RequestMapping(value = "/cs580/register", method = RequestMethod.POST)
 	ModelAndView registerAction(@ModelAttribute("customer") Customer customer) {
-		List<Customer> customerList = customerRepository.findAll();
+		Customer c = customerRepository.findByEmail(customer.getEmail());
 
-		System.out.println("spring customer email: " + customer.getEmail());
-		System.out.println("spring customer password: " + customer.getPassword());
-		System.out.println("spring customer firstName: " + customer.getFirstName());
-		System.out.println("spring customer lastname: " + customer.getLastName());
+		if (c != null) {
+			ModelAndView modelAndView = new ModelAndView("customerExist");
 
-		for (Customer c : customerList) {
-			String customerEmail = c.getEmail();
-
-			if (customerEmail.equals(customer.getEmail())) {
-				ModelAndView modelAndView = new ModelAndView("customerExist");
-				return modelAndView;
-			}
+			return modelAndView;
 		}
+
 		customerRepository.save(customer);
+
 		ModelAndView modelAndView = new ModelAndView("userHomepage");
+
 		modelAndView.addObject("title", "User Home Page");
 		modelAndView.addObject("userFirstName", customer.getFirstName());
+
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/cs580/upload", method = RequestMethod.GET)
 	ModelAndView getUploadPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("uploadPage");
+
 		modelAndView.addObject("title", "upload page title");
+
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/{customerId}/displayChartsList", method = RequestMethod.GET)
-	ModelAndView displayChartsList(@PathVariable("customerId") String customerID) {
+	ModelAndView displayChartsList(
+		@PathVariable("customerId") String customerID) {
+
 		ModelAndView modelAndView = new ModelAndView("displayChartsListPage");
+
 		modelAndView.addObject("title", "Charts List Display Page");
 		modelAndView.addObject("customerID", customerID);
 
+		List<CustomerDataset> customerDataset =
+				datasetRepository.findAllByCustomerId(customerID);
+		
+		System.out.println("Chart names are: ");
+		for (CustomerDataset test : customerDataset) {
+			System.out.println(test.getName());
+		}
+		
+		modelAndView.addObject("customerDataset", customerDataset);
 		return modelAndView;
 	}
 }

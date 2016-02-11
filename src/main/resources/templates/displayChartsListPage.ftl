@@ -8,6 +8,7 @@
 </head>
 
 <body>
+	<div>Customer ID is: ${customerID} </div>
 
    <div>Customer ID is: ${customerID} </div>
 	<div>
@@ -22,6 +23,15 @@
 		Column: <input type="text" name="columns"/><br/>
 		Name: <input type="text" name="name"><br /> <br />
 		<button onClick="submitForm()">Generate Chart</button>
+	</div>
+	<div>
+		<table>
+	<#list customerDataset as database>
+		<tr>
+			<td>ChartName:</td>
+			<td>${database.name}</td>
+		</tr>
+	</#list>
 	</div>
 </body>
 <script>
