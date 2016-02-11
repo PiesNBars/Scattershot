@@ -16,7 +16,8 @@
 	<script>
 		var customerId = "${customer.id}";
 	</script>
-	<div> <button onclick="goToDisplayPage()">Add</button></div>
+
+	<div><button onclick="goToDisplayPage()">Add</button></div>
 
 </body>
 

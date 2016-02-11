@@ -8,6 +8,8 @@ package edu.cpp.cs580.controller;
 
 import edu.cpp.cs580.customer.Customer;
 import edu.cpp.cs580.customer.CustomerRepository;
+import edu.cpp.cs580.customer.data.CustomerDataset;
+import edu.cpp.cs580.customer.data.DatasetRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class CustomerController {
 	@Autowired private CustomerRepository customerRepository;
+	@Autowired private DatasetRepository datasetRepository;
 
 // Not Used, serves as example for RequestParam
 	@RequestMapping(value = "/customer/checkExist", method = RequestMethod.POST)
@@ -130,6 +133,15 @@ public class CustomerController {
 		modelAndView.addObject("title", "Charts List Display Page");
 		modelAndView.addObject("customerID", customerID);
 
+		List<CustomerDataset> customerDataset =
+				datasetRepository.findAllByCustomerId(customerID);
+		
+		System.out.println("Chart names are: ");
+		for (CustomerDataset test : customerDataset) {
+			System.out.println(test.getName());
+		}
+		
+		modelAndView.addObject("customerDataset", customerDataset);
 		return modelAndView;
 	}
 }
