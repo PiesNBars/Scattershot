@@ -135,13 +135,27 @@ public class CustomerController {
 
 		List<CustomerDataset> customerDataset =
 				datasetRepository.findAllByCustomerId(customerID);
-		
+
 		System.out.println("Chart names are: ");
 		for (CustomerDataset test : customerDataset) {
 			System.out.println(test.getName());
 		}
-		
+
 		modelAndView.addObject("customerDataset", customerDataset);
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/{customerID}/{chartID}/displayChartForm", method = RequestMethod.GET)
+	ModelAndView displayChart(
+		@PathVariable("chartID") String chartID,
+		@PathVariable("customerID") String customerID) {
+
+		ModelAndView modelAndView = new ModelAndView("displayChartFormPage");
+
+		modelAndView.addObject("title", "Chart Display Page");
+		modelAndView.addObject("chartID", chartID);
+		modelAndView.addObject("customerID", customerID);
+
 		return modelAndView;
 	}
 }
