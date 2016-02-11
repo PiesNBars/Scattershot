@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>This must be the place</title>
+	<title>Scattershot</title>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="/js/bar-chart.js"></script>
