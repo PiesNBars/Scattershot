@@ -7,3 +7,7 @@
 function goToDisplayPage() {
 	window.location.replace("/" + customerId +"/displayChartsList");
 }
+
+function goToChartFormPage() {
+	window.location.replace("/" + customerID + "/" + chartID + "/displayChartForm");
+}

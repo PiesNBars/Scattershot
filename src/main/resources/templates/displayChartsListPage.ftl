@@ -4,39 +4,29 @@
     <title>${title}</title>
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="/js/chart-form-control.js"></script>
+	<script src="/js/pageControl.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 
 <body>
+	<script>
+		var customerID = "${customerID}";
+	</script>
+
 	<div>Customer ID is: ${customerID} </div>
-	<div>
-		Is this data being aggregated?:
-		<input type="radio" name="aggregate" value="true"/>Yes
-		<input type="radio" name="aggregate" value="false" checked/>No<br/>
-		What type of Chart Is this?
-		<input type="radio" name="chartType" value="line"/>Line Chart
-		<input type="radio" name="chartType" value="bar"/>Bar Chart
-		<input type="radio" name="chartType" value="histogram"/>Histogram<br/>
-		Bins: <input type="number" name="bins"/><br/>
-		Column: <input type="text" name="columns"/><br/>
-		Name: <input type="text" name="name"><br /> <br />
-		Options: <input type="text" name="options"><br/>
-		<button onClick="submitForm()">Generate Chart</button>
-	</div>
+
 	<div>
 		<table>
-	<#list customerDataset as database>
+	<#list customerDataset as dataset>
 		<tr>
 			<td>ChartName:</td>
-			<td>${database.name}</td>
+			<td><button onclick="goToChartFormPage()">
+				<script>
+					var chartID = "${dataset.id}";
+				</script>
+				${dataset.name}</button></td>
 		</tr>
 	</#list>
 	</div>
 </body>
-<script>
-	function submitForm() {
-		submit("${customerID}");
-	};
-</script>
-
 </html>
