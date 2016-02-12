@@ -24,7 +24,9 @@ public class CustomerDataset {
 	private Map<String, String> typeMap;
 	private List<Map<String, ? extends Serializable>> dataset;
 	
-	public CustomerDataset(){};
+	public CustomerDataset(){
+		dataset = new ArrayList<>();
+	};
 	
 	public CustomerDataset(List<Map<String, ? extends Serializable>> dataset) {
 		this.dataset = dataset;
@@ -90,12 +92,15 @@ public class CustomerDataset {
 		Iterator<String> keys = row.keySet().iterator();
 		List<String> wrongTypes = new ArrayList<String>();
 		String key;
+		
+		if(typeMap == null) {
+			typeMap = createTypeMap(row);
+		}
+		
 		while(keys.hasNext()) {
 			key = keys.next();
 			Serializable value = row.get(key);
-			
 			try {
-
 				Class<?> clazz = Class.forName(typeMap.get(key));
 				clazz.cast(value);
 			} catch (ClassCastException cce) {
@@ -148,7 +153,7 @@ public class CustomerDataset {
 		return getColumns(columns);
 	}
 	
-	public CustomerDataset getColumns(Map<String, String> columnNames) {
+	private CustomerDataset getColumns(Map<String, String> columnNames) {
 		Slice slice = new Slice(columnNames.keySet());
 		List<Map<String, ? extends Serializable>> dataSlice = map(slice);
 		CustomerDataset result = new CustomerDataset(dataSlice);
@@ -192,15 +197,22 @@ public class CustomerDataset {
 	
 	private Map<String, String> createTypeMap(List<Map<String, ? extends Serializable>> data) {
 		
-		Map<String, String> newTypeMap = new HashMap<>();
+		Map<String, String> newTypeMap = null;
 		
 		if(data != null && data.size() > 0) {
 			Map<String, ? extends Serializable> firstRow = data.get(0);
-			Set<String> columns = firstRow.keySet();
-			
-			for(String columnName : columns) {
-				newTypeMap.put(columnName, firstRow.get(columnName).getClass().getCanonicalName());
-			}
+			newTypeMap = createTypeMap(firstRow);
+		}
+		
+		return newTypeMap;
+	}
+	
+	private Map<String, String> createTypeMap(Map<String, ? extends Serializable> row) {
+		Set<String> columns = row.keySet();
+		Map<String, String> newTypeMap = new HashMap<>();
+		
+		for(String columnName : columns) {
+			newTypeMap.put(columnName, row.get(columnName).getClass().getCanonicalName());
 		}
 		
 		return newTypeMap;
