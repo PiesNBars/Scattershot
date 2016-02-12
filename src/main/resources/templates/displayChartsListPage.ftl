@@ -20,6 +20,7 @@
 		Bins: <input type="number" name="bins"/><br/>
 		Column: <input type="text" name="columns"/><br/>
 		Name: <input type="text" name="name"><br /> <br />
+		Options: <input type="text" name="options"><br/>
 		<button onClick="submitForm()">Generate Chart</button>
 	</div>
 	<div>
