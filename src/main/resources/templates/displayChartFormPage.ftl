@@ -17,17 +17,15 @@
 
    <div>Customer ID is: ${customerID} </div>
 	<div>
-		Is this data being aggregated?:
-		<input type="radio" name="aggregate" value="true"/>Yes
-		<input type="radio" name="aggregate" value="false" checked/>No<br/>
-		What type of Chart Is this?
-		<input type="radio" name="chartType" value="line"/>Line Chart
-		<input type="radio" name="chartType" value="bar"/>Bar Chart
-		<input type="radio" name="chartType" value="histogram"/>Histogram<br/>
-		Bins: <input type="number" name="bins"/><br/>
-		Column: <input type="text" name="columns"/><br/>
-		Name: <input type="text" name="name"><br /> <br />
-		<button onClick="submitForm()">Generate Chart</button>
+		<form method="get" action="/chart/add/${chartID}">
+			What type of Chart Is this?
+			<input type="radio" name="chartType" value="line"/>Line Chart
+			<input type="radio" name="chartType" value="bar"/>Bar Chart
+			<input type="radio" name="chartType" value="histogram"/>Histogram<br/>
+			Bins (only necessary for histogram): <input type="number" name="bins"/><br/>
+			Columns: <input type="text" name="columns"/><br/>
+			<input type="submit" value="drawChart"/>
+		</form>
 	</div>
 </body>
 <script>

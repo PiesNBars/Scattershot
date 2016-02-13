@@ -16,6 +16,10 @@ public class ChartSpec {
 	
 	public ChartSpec() {}
 	
+	public ChartSpec(ChartType chartType) {
+		this.chartType = chartType;
+	}
+	
 	public String getId() {
 		return id;
 	}

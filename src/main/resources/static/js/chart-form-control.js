@@ -2,18 +2,23 @@ function submit(customerId) {
 	var bins = parseInt($("[name=bins]").val());
 	var request = {
 		chartType: $("[name=chartType]").val(),
-		aggregate: $("[name=aggregate]").val() == "true",
-		bins: isNaN(bins) ? 0 : bins,
+		bins: 11,
 		customerId: customerId,
-		name: $("[name=name]").val(),
-		columns: $("[name=columns]").val().split(",").map( function(str) {
-			return str.trim();
-		})
-	}
+		datasetName: $("[name=name]").val(),
+		options: $("[name=options]").val(),
+		columns: $("[name=columns]").val()
+	};
 	
+//	private String customerId;
+//	private String datasetName;
+//	private String chartType;
+//	private String columns;
+//	private Integer bins;
+//	private String options;
+	debugger;
 	$.ajax({
 		type : "POST",
-		contentType : "application/json; chartset=utf-8",
+		contentType : "application/json",
 		url : "/chart/add",
 		data : JSON.stringify(request),
 		dataType : 'json',

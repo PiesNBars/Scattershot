@@ -212,7 +212,7 @@ public class CustomerDataset {
 		Map<String, String> newTypeMap = new HashMap<>();
 		
 		for(String columnName : columns) {
-			newTypeMap.put(columnName, row.get(columnName).getClass().getCanonicalName());
+			newTypeMap.put(columnName, row.get(columnName).getClass().getName());
 		}
 		
 		return newTypeMap;
