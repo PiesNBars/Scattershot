@@ -62,8 +62,8 @@ public class CustomerDatasetTest {
 		testObject.setDataset(dataset);
 		
 		Map<String, String> typeMap = testObject.getTypeMap();
-		assertEquals(typeMap.get(intKey), Integer.class.getCanonicalName());
-		assertEquals(typeMap.get(stringKey), String.class.getCanonicalName());
+		assertEquals(typeMap.get(intKey), Integer.class.getName());
+		assertEquals(typeMap.get(stringKey), String.class.getName());
 	}
 	
 	@Test
@@ -74,7 +74,7 @@ public class CustomerDatasetTest {
 		Map<String, String> types = ret.getTypeMap();
 		Map<String, ? extends Serializable> row = ret.getDataset().get(0);
 		
-		assertEquals(types.get(stringKey), String.class.getCanonicalName());
+		assertEquals(types.get(stringKey), String.class.getName());
 		assertEquals(row.get(stringKey), stringValue);
 	}
 	

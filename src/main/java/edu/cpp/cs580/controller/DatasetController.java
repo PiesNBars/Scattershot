@@ -30,6 +30,7 @@ import edu.cpp.cs580.customer.data.ChartSpecRepository;
 import edu.cpp.cs580.customer.data.CustomerDataset;
 import edu.cpp.cs580.customer.data.DatasetRepository;
 import edu.cpp.cs580.util.CSVMapper;
+import edu.cpp.cs580.util.Mappable;
 import edu.cpp.cs580.util.Reduceable;
 
 @Controller
@@ -48,7 +49,7 @@ public class DatasetController {
 			@RequestParam(required=false, value="bins") Integer bins)
 			throws Exception {
 
-		String[] variables = columns.split(",");
+		String[] variables = parseColumnNames(columns, ",");
 		CustomerDataset resultset = null;
 		CustomerDataset dataset = datasetRepository.findOne(datasetId);
 		Set<String> columnsDifference = doesNotContain(dataset, variables);
@@ -73,12 +74,16 @@ public class DatasetController {
 		if(resultset != null) {
 			String json = objectMapper.writeValueAsString(resultset.getDataset());
 			ModelAndView chartPage = new ModelAndView("chart");
+			String xType = resultset.getTypeMap().get("x");
+			String yType = resultset.getTypeMap().get("y");
 			
 			chart.setColumns(variables);
 			chart.setDatasetId(datasetId);
 			
 			chartSpecRepository.save(chart);
 			
+			chartPage.addObject("xType", xType);
+			chartPage.addObject("yType", yType);
 			chartPage.addObject("dataset", json);
 			chartPage.addObject("chartType", chartType);
 			
@@ -86,6 +91,13 @@ public class DatasetController {
 		}
 		
 		return new ModelAndView("error");
+	}
+	
+	private String[] parseColumnNames(String columnNameString, String sep) {
+		String[] columns = columnNameString.split(sep);
+		for(int i = 0; i < columns.length; i++)
+			columns[i] = columns[i].trim();
+		return columns;
 	}
 	
 	private CustomerDataset getHistogramData(CustomerDataset data, String column,
@@ -110,16 +122,20 @@ public class DatasetController {
 		if(columns.length != 2 || data.getTypeMap().keySet().size() < 2)
 			return null;
 		
-		return data.getColumns(columns);
+		ToLineChart toLineChart = new ToLineChart(columns[0], columns[1]);
+		return new CustomerDataset(data.map(toLineChart));
 	}
 	
+	//TODO: This is failing for some reason. Something about object comparison?
 	private Set<String> doesNotContain(CustomerDataset dataset, String[] variables) {
 		Set<String> tableColumns = dataset.getTypeMap().keySet();
 		Set<String> setDifference = new HashSet<>();
 		
-		for(int i = 0; i < variables.length; i++)
-			if(!tableColumns.contains(variables[i]))
-				setDifference.add(variables[i]);
+		for(int i = 0; i < variables.length; i++){
+			String col = variables[i];
+			if(!tableColumns.contains(col))
+				setDifference.add(col);
+		}
 		
 		return setDifference;
 	}
@@ -287,6 +303,32 @@ public class DatasetController {
     		}
     		
     		return boundries;
+    	}
+    }
+    
+    public class ToLineChart implements Mappable<Map<String, ? extends Serializable>, Map<String, ? extends Serializable>>{
+    	
+    	private String x;
+    	private String y;
+    	private Map<String, ? extends Serializable> arg;
+    	
+    	public ToLineChart(String x, String y) {
+    		this.x = x;
+    		this.y = y;
+    	}
+    	
+    	public ToLineChart withArgument(Map<String, ? extends Serializable> arg) {
+    		this.arg = arg;
+    		return this;
+    	}
+    	
+    	public Map<String, ? extends Serializable> call() {
+    		Map<String, Serializable> nextPair = new HashMap<>();
+    		
+    		nextPair.put("x", arg.get(x));
+    		nextPair.put("y", arg.get(y));
+    		
+    		return nextPair;
     	}
     }
 

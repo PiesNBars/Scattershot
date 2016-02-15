@@ -25,11 +25,12 @@ $.scattershot.barChart = (function() {
 	};
 	
 	var that = {
-		create: function(data, width, height, palette) {
+		create: function(dataset, width, height, palette) {
 			// This code taken largely from the example at
 			// https://bl.ocks.org/mbostock/3885304.
 			
 			// Constants
+			var data = dataset.dataset;
 			var marginRatio = {top: 0.036, right: 0.02, bottom: 0.055, left: 0.039};
 			
 			var margin = {
@@ -89,6 +90,7 @@ $.scattershot.barChart = (function() {
 			    .on("mouseout", function(d) { d3.select(this).style("fill", barColor(d.key)); })
 
 		}	
-	}
+	};
+	
 	return that;
 })();
