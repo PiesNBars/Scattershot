@@ -18,9 +18,8 @@
 
 <body>
 	<div class="pen-title">
-		<h1>Material Login Form</h1>
+		<h1>Scattershot User Login Page</h1>
 	</div>
-	<div class="rerun"><a href="">Rerun Pen</a></div>
 	<div class="container">
 		<div class="card"></div>
 		<div class="card">
@@ -56,12 +55,6 @@
 				<div class="input-container">
 					<@spring.formPasswordInput "customer.password"/>
 					<label for="RegisterPassword">Password</label>
-					<div class="bar"></div>
-				</div>
-				<div class="input-container">
-					<input type="password" id="RepeatPassword" required="required" onkeyup="checkPass(); return false;"/>
-					<span id="confirmMessage" class="confirmMessage"></span>
-					<label for="RepeatPassword">Repeat Password</label>
 					<div class="bar"></div>
 				</div>
 				<div class="input-container">

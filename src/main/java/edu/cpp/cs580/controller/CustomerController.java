@@ -49,7 +49,7 @@ public class CustomerController {
 	ModelAndView getLoginPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("login");
 
-		modelAndView.addObject("title", "login page title");
+		modelAndView.addObject("title", "Scattershot");
 
 		m.addAttribute("customer", new Customer());
 
