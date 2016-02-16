@@ -9,3 +9,13 @@ body {
     stroke: black;
     shape-rendering: crispEdges;  /* Round any decimal pixels so it'll render nicely */
 }
+
+.line {
+	clip-path: url(#clip);
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}

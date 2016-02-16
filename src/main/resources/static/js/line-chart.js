@@ -62,7 +62,7 @@ $.scattershot.lineChart = (function() {
 				right: focusMarginRatio.right * width,
 				left: focusMarginRatio.left * width,
 				top: focusMarginRatio.top * height,
-				bottom: focusMarginRatio.top * height
+				bottom: focusMarginRatio.bottom * height
 			};
 			
 			var contextMargin = {
@@ -97,7 +97,7 @@ $.scattershot.lineChart = (function() {
 			var focusLine = d3.svg.line()
 	          .interpolate("linear")
 	          .x(function(d) { return focusXScale(d.x); })
-	          .y(function(d) { return focusXScale(d.y); });
+	          .y(function(d) { return focusYScale(d.y); });
 	
 			var contextLine = d3.svg.line()
 	          .interpolate("linear")
@@ -119,15 +119,15 @@ $.scattershot.lineChart = (function() {
 	
 			var context = svg.append("g")
 	          .attr("class", "context")
-	          .attr("transform", "translate(" + contextMargin.left + "," + focusMargin.top + ")");
-			
+	          .attr("transform", "translate(" + focusMargin.left + "," + contextMargin.top + ")");
+	
 			color = color || "steelblue";
 	
 			svg.append("defs").append("clipPath")
 	          .attr("id", "clip")
 	        .append("rect")
-	          .attr("width", width)
-	          .attr("height", height);	
+	          .attr("width", plotWidth)
+	          .attr("height", focusHeight);	
 	
 			focus.append("path")
 	          .datum(dataset)
