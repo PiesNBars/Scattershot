@@ -1,1 +1,1 @@
-Uh, everything's under control. Situation normal.
+Uh, everything's under control. Situation normal. We're fine here, we're all fine... How are you?
