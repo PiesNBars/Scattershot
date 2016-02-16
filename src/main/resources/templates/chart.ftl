@@ -12,6 +12,10 @@
 	
 </body>
 <script>
-	test("${dataset?json_string}", "${chartType}", "${xType}", "${yType}");
+	<#if chartType?? && chartType?is_string && chartType == "line">
+		test("${dataset?json_string}", "${chartType}", "${xType}", "${yType}");
+	<#else>
+		test("${dataset?json_string}", "${chartType}");
+	</#if>
 </script>
 </html>
