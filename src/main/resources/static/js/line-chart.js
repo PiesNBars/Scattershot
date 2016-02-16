@@ -1,7 +1,7 @@
 if(!$.scattershot)
 	$.scattershot = {};
 
-
+// Minor change comment
 $.scattershot.lineChart = (function() {
 
 	var getColorScheme = function(palette) {
