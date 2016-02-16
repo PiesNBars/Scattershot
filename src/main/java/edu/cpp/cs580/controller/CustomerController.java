@@ -30,6 +30,41 @@ public class CustomerController {
 	@Autowired private CustomerRepository customerRepository;
 	@Autowired private DatasetRepository datasetRepository;
 
+	@RequestMapping(value = "/{customerID}/{chartID}/displayChartForm", method = RequestMethod.GET)
+	ModelAndView displayChart(
+		@PathVariable("chartID") String chartID,
+		@PathVariable("customerID") String customerID) {
+
+		ModelAndView modelAndView = new ModelAndView("displayChartFormPage");
+
+		modelAndView.addObject("title", "Chart Display Page");
+		modelAndView.addObject("chartID", chartID);
+		modelAndView.addObject("customerID", customerID);
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/{customerId}/displayChartsList", method = RequestMethod.GET)
+	ModelAndView displayChartsList(
+		@PathVariable("customerId") String customerID) {
+
+		ModelAndView modelAndView = new ModelAndView("displayChartsListPage");
+
+		modelAndView.addObject("title", "Charts List Display Page");
+		modelAndView.addObject("customerID", customerID);
+
+		List<CustomerDataset> customerDataset =
+				datasetRepository.findAllByCustomerId(customerID);
+
+		System.out.println("Chart names are: ");
+		for (CustomerDataset test : customerDataset) {
+			System.out.println(test.getName());
+		}
+
+		modelAndView.addObject("customerDataset", customerDataset);
+		return modelAndView;
+	}
+
 // Not Used, serves as example for RequestParam
 	@RequestMapping(value = "/customer/checkExist", method = RequestMethod.POST)
 	String existCheck(@RequestParam("email") String email) {
@@ -52,6 +87,15 @@ public class CustomerController {
 		modelAndView.addObject("title", "Scattershot");
 
 		m.addAttribute("customer", new Customer());
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/cs580/upload", method = RequestMethod.GET)
+	ModelAndView getUploadPage(Model m) {
+		ModelAndView modelAndView = new ModelAndView("uploadPage");
+
+		modelAndView.addObject("title", "upload page title");
 
 		return modelAndView;
 	}
@@ -111,50 +155,6 @@ public class CustomerController {
 
 		modelAndView.addObject("title", "User Home Page");
 		modelAndView.addObject("userFirstName", customer.getFirstName());
-
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/cs580/upload", method = RequestMethod.GET)
-	ModelAndView getUploadPage(Model m) {
-		ModelAndView modelAndView = new ModelAndView("uploadPage");
-
-		modelAndView.addObject("title", "upload page title");
-
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/{customerId}/displayChartsList", method = RequestMethod.GET)
-	ModelAndView displayChartsList(
-		@PathVariable("customerId") String customerID) {
-
-		ModelAndView modelAndView = new ModelAndView("displayChartsListPage");
-
-		modelAndView.addObject("title", "Charts List Display Page");
-		modelAndView.addObject("customerID", customerID);
-
-		List<CustomerDataset> customerDataset =
-				datasetRepository.findAllByCustomerId(customerID);
-
-		System.out.println("Chart names are: ");
-		for (CustomerDataset test : customerDataset) {
-			System.out.println(test.getName());
-		}
-
-		modelAndView.addObject("customerDataset", customerDataset);
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/{customerID}/{chartID}/displayChartForm", method = RequestMethod.GET)
-	ModelAndView displayChart(
-		@PathVariable("chartID") String chartID,
-		@PathVariable("customerID") String customerID) {
-
-		ModelAndView modelAndView = new ModelAndView("displayChartFormPage");
-
-		modelAndView.addObject("title", "Chart Display Page");
-		modelAndView.addObject("chartID", chartID);
-		modelAndView.addObject("customerID", customerID);
 
 		return modelAndView;
 	}
