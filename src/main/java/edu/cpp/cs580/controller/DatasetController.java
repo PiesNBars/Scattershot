@@ -59,14 +59,14 @@ public class DatasetController {
 			return new ModelAndView("error");
 		}
 		
-		if(chartType.compareTo("histogram") == 0) {
+		if(chartType.compareTo("histogram") == 0 && bins != null && bins > 0) {
 			resultset = getHistogramData(dataset, variables[0], bins);
 			chart = new ChartSpec(ChartType.HISTOGRAM);
 			chart.setBins(bins);
 		} else if (chartType.compareTo("bar") == 0) {
 			resultset = getBarChartData(dataset, variables[0]);
 			chart = new ChartSpec(ChartType.BAR);
-		} else if (chartType.compareTo("line") == 0){
+		} else if (chartType.compareTo("line") == 0 && columns.length() == 2){
 			resultset = getLineData(dataset, variables);
 			chart = new ChartSpec(ChartType.LINE);
 		}
@@ -92,6 +92,44 @@ public class DatasetController {
 		
 		return new ModelAndView("error");
 	}
+	
+	@RequestMapping(value="/chart/show/{chartSpecId}", method=RequestMethod.GET)
+	public ModelAndView showDataset(@PathVariable String chartSpecId) 
+			throws Exception{
+		
+		ChartSpec spec = chartSpecRepository.findOne(chartSpecId);
+		CustomerDataset dataset = datasetRepository.findOne(spec.getDatasetId());
+		CustomerDataset resultset = null;
+		String chartType = null;
+		
+		switch(spec.getChartType()) {
+			case HISTOGRAM: resultset = getHistogramData(dataset, spec.getColumns()[0], spec.getBins());
+							chartType = "histogram";
+							break;
+			case BAR: 		resultset = getBarChartData(dataset, spec.getColumns()[0]);
+							chartType = "bar";
+							break;
+			case LINE: 		resultset = getLineData(dataset, spec.getColumns());
+							chartType = "line";
+		}
+		
+		if(resultset != null) {
+			ModelAndView chartPage = new ModelAndView("chart");
+			String jsonData = objectMapper.writeValueAsString(resultset.getDataset());
+			String xType = resultset.getTypeMap().get("x");
+			String yType = resultset.getTypeMap().get("y");
+			
+			chartPage.addObject("xType", xType);
+			chartPage.addObject("yType", yType);
+			chartPage.addObject("dataset", jsonData);
+			chartPage.addObject("chartType", chartType);
+			
+			return chartPage;
+		}
+		
+		return new ModelAndView("error");
+	}
+	
 	
 	private String[] parseColumnNames(String columnNameString, String sep) {
 		String[] columns = columnNameString.split(sep);
@@ -126,7 +164,6 @@ public class DatasetController {
 		return new CustomerDataset(data.map(toLineChart));
 	}
 	
-	//TODO: This is failing for some reason. Something about object comparison?
 	private Set<String> doesNotContain(CustomerDataset dataset, String[] variables) {
 		Set<String> tableColumns = dataset.getTypeMap().keySet();
 		Set<String> setDifference = new HashSet<>();
