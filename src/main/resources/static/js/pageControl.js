@@ -9,9 +9,13 @@ function goToDisplayPage() {
 }
 
 function goToChartFormPage() {
-	window.location.replace("/" + customerID + "/" + chartID + "/displayChartForm");
+	window.location.replace("/" + customerId + "/" + chartId + "/displayChartForm");
 }
 
 function goToUploadPage() {
 	window.location.replace("/" + customerId +"/upload");
+}
+
+function goToHomepage() {
+	window.location.replace("/" + customerId +"/homepage");
 }

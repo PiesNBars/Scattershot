@@ -10,9 +10,9 @@
 
 <body>
 	<script>
-		var customerID = "${customerID}";
+		var customerId = "${customerID}";
 	</script>
-
+	<button onclick="goToHomepage()" class="button">Homepage</button>
 	<div>Customer ID is: ${customerID} </div>
 
 	<div>

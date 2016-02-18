@@ -3,10 +3,15 @@
 <head>
     <title>${title}</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+	<script src="/js/pageControl.js"></script>
 </head>
 
 <body>
+	<script>
+		var customerId = "${customerID}";
+	</script>
 	<div> Customer id is: ${customerID}</div>
+	<button onclick="goToHomepage()" class="button">Homepage</button>
    	<form method="POST" enctype="multipart/form-data" action="/upload">
 		<input type="hidden" name="id" value="${customerID}" />
 		Column names: <input type="text" name="header">

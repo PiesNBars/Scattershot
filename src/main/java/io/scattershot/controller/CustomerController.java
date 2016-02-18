@@ -101,6 +101,19 @@ public class CustomerController {
 		return modelAndView;
 	}
 
+	@RequestMapping(value = "/{customerID}/homepage", method = RequestMethod.GET)
+	ModelAndView getHomepage(@PathVariable("customerID") String customerID) {
+		Customer c = customerRepository.findById(customerID);
+
+		ModelAndView modelAndView = new ModelAndView("userHomepage");
+
+		modelAndView.addObject("title", "User Home Page");
+		modelAndView.addObject("userFirstName", c.getFirstName());
+		modelAndView.addObject("customer", c);
+
+		return modelAndView;
+	}
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	ModelAndView loginAction(@ModelAttribute("customer") Customer customer) {
 		System.out.println("customer email: " + customer.getEmail());
