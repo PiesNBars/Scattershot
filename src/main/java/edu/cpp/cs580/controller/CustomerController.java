@@ -80,7 +80,7 @@ public class CustomerController {
 		return "false";
 	}
 
-	@RequestMapping(value = "/cs580/main", method = RequestMethod.GET)
+	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	ModelAndView getLoginPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("login");
 
@@ -91,7 +91,7 @@ public class CustomerController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/cs580/upload", method = RequestMethod.GET)
+	@RequestMapping(value = "/upload", method = RequestMethod.GET)
 	ModelAndView getUploadPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("uploadPage");
 
@@ -100,7 +100,7 @@ public class CustomerController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/cs580/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	ModelAndView loginAction(@ModelAttribute("customer") Customer customer) {
 		System.out.println("customer email: " + customer.getEmail());
 
@@ -152,7 +152,7 @@ public class CustomerController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/cs580/register", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	ModelAndView registerAction(@ModelAttribute("customer") Customer customer) {
 		Customer c = customerRepository.findByEmail(customer.getEmail());
 
