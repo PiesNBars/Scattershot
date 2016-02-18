@@ -6,7 +6,9 @@
 </head>
 
 <body>
+	<div> Customer id is: ${customerID}</div>
    	<form method="POST" enctype="multipart/form-data" action="/upload">
+		<input type="hidden" name="id" value="${customerID}" />
 		Column names: <input type="text" name="header">
 		<br />
 

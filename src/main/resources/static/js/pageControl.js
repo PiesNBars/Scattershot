@@ -11,3 +11,7 @@ function goToDisplayPage() {
 function goToChartFormPage() {
 	window.location.replace("/" + customerID + "/" + chartID + "/displayChartForm");
 }
+
+function goToUploadPage() {
+	window.location.replace("/" + customerId +"/upload");
+}

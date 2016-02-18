@@ -34,7 +34,19 @@
 				<span class="byline">Go to list of charts</span>
 			</div>
 			<ul class="actions">
-				<li><button onclick="goToDisplayPage()">Add</button></li>
+				<li><button onclick="goToDisplayPage()" class="button">Add</button></li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="banner">
+		<div class="container">
+			<div class="title">
+				<h2>Upload a new chart</h2>
+				<span class="byline">go to upload page</span>
+			</div>
+			<ul class="actions">
+				<li><button onclick="goToUploadPage()" class="button">Add</button></li>
 			</ul>
 		</div>
 	</div>

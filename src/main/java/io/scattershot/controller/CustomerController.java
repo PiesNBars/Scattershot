@@ -91,11 +91,12 @@ public class CustomerController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/upload", method = RequestMethod.GET)
-	ModelAndView getUploadPage(Model m) {
+	@RequestMapping(value = "/{customerID}/upload", method = RequestMethod.GET)
+	ModelAndView getUploadPage(@PathVariable("customerID") String customerID) {
 		ModelAndView modelAndView = new ModelAndView("uploadPage");
 
 		modelAndView.addObject("title", "upload page title");
+		modelAndView.addObject("customerID", customerID);
 
 		return modelAndView;
 	}
