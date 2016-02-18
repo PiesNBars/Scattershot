@@ -44,9 +44,9 @@ public class CustomerController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/{customerId}/displayChartsList", method = RequestMethod.GET)
+	@RequestMapping(value = "/{customerID}/displayChartsList", method = RequestMethod.GET)
 	ModelAndView displayChartsList(
-		@PathVariable("customerId") String customerID) {
+		@PathVariable("customerID") String customerID) {
 
 		ModelAndView modelAndView = new ModelAndView("displayChartsListPage");
 
