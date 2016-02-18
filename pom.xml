@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>edu.cpp.cs580</groupId>
-	<artifactId>cs580</artifactId>
+	<artifactId>Scattershot</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>cs580</name>
+	<name>Scattershot</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
