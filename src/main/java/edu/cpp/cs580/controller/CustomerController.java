@@ -139,6 +139,19 @@ public class CustomerController {
 		}
 	}
 
+	@RequestMapping(value = "/forgotPassword", method = RequestMethod.GET)
+	ModelAndView loginAction() {
+		ModelAndView modelAndView = new ModelAndView(
+			"forgotPasswordPage");
+
+		modelAndView.addObject("title", "Forgot Password");
+		modelAndView.addObject(
+			"message",
+			"This is the forgot password page");
+
+		return modelAndView;
+	}
+
 	@RequestMapping(value = "/cs580/register", method = RequestMethod.POST)
 	ModelAndView registerAction(@ModelAttribute("customer") Customer customer) {
 		Customer c = customerRepository.findByEmail(customer.getEmail());

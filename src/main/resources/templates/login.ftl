@@ -38,7 +38,7 @@
 				<div class="button-container">
 					<button type="submit"><span>Next</span></button>
 				</div>
-				<div class="footer"><a href="#">Forgot your password?</a></div>
+				<div class="footer"><a href="/forgotPassword">Forgot your password?</a></div>
 			</form>
 		</div>
 		<div class="card alt">
