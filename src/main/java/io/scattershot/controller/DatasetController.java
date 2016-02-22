@@ -66,7 +66,7 @@ public class DatasetController {
 		} else if (chartType.compareTo("bar") == 0) {
 			resultset = getBarChartData(dataset, variables[0]);
 			chart = new ChartSpec(ChartType.BAR);
-		} else if (chartType.compareTo("line") == 0 && columns.length() == 2){
+		} else if (chartType.compareTo("line") == 0 && variables.length == 2){
 			resultset = getLineData(dataset, variables);
 			chart = new ChartSpec(ChartType.LINE);
 		}
