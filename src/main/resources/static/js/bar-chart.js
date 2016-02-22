@@ -18,7 +18,7 @@ $.scattershot.barChart = (function() {
 			};
 		else
 			return {
-				categories: palette,
+				categorides: palette,
 				highlght: palette[0]
 			}
 		
@@ -38,15 +38,17 @@ $.scattershot.barChart = (function() {
 				top: marginRatio.top * height,
 				bottom: marginRatio.top * height
 			};
+			var chartHeight = height - margin.top - margin.bottom;
+			var chartWidth = width - margin.left - margin.right;
 			
 			var color = getColorScheme(palette);
 			var barColor = d3.scale.ordinal().range(color.categories);
 
 			var x = d3.scale.ordinal()
-			    .rangeRoundBands([0, width], .1);
+			    .rangeRoundBands([0, chartWidth], .1);
 			
 			var y = d3.scale.linear()
-			    .range([height, 0]);
+			    .range([chartHeight, 0]);
 			
 			var xAxis = d3.svg.axis()
 			    .scale(x)
@@ -57,19 +59,18 @@ $.scattershot.barChart = (function() {
 			    .orient("left");
 			
 			var svg = d3.select("body").append("svg")
-			    .attr("width", width + margin.left + margin.right)
-			    .attr("height", height + margin.top + margin.bottom)
+			    .attr("width", width)
+			    .attr("height", height)
 			  .append("g")
 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 			
-			debugger;
 			x.domain(data.map(function(d) { return d.key; }));
 			y.domain([Math.min(d3.min(data, function(d) { return d.value; }), 0),
 			          d3.max(data, function(d) { return d.value; })]);
 			
 			svg.append("g")
 			    .attr("class", "x axis")
-			    .attr("transform", "translate(0," + height + ")")
+			    .attr("transform", "translate(0," + chartHeight + ")")
 			    .call(xAxis);
 			
 			svg.append("g")
@@ -83,9 +84,9 @@ $.scattershot.barChart = (function() {
 			    .attr("x", function(d) { return x(d.key); })
 			    .attr("width", x.rangeBand())
 			    .attr("y", function(d) { return y(d.value); })
-			    .attr("height", function(d) { return height - y(d.value); })
+			    .attr("height", function(d) { return chartHeight - y(d.value); })
 			    .style("fill", function(d) { return barColor(d.key); })
-			    .on("mouseover", function() { debugger; d3.select(this).style("fill", color.highlight); })
+			    .on("mouseover", function() { d3.select(this).style("fill", color.highlight); })
 			    .on("mouseout", function(d) { d3.select(this).style("fill", barColor(d.key)); })
 
 		}	
