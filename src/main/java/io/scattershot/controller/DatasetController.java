@@ -141,9 +141,15 @@ public class DatasetController {
 	private CustomerDataset getHistogramData(CustomerDataset data, String column,
 			Integer bins) {
 		Map<String, String> typeMap = data.getTypeMap();
+		try {
+			Class<?> type = Class.forName(typeMap.get(column));
 
-		if(bins == null || bins < 2 || typeMap.get(column) != Integer.class.getName())
+			if(bins == null || bins < 2 || !Number.class.isAssignableFrom(type))
+				return null;
+			
+		} catch(ClassNotFoundException cnfe) {
 			return null;
+		}
 
 		ToHistogram toHistogram = new ToHistogram(column, bins);
 		return data.reduce(toHistogram);
