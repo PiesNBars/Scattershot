@@ -240,12 +240,15 @@ public class DatasetController {
     	public CustomerDataset call() {
 
     		List<Map<String, ? extends Serializable>> data = rawData.getDataset();
+    		String typeName = rawData.getTypeMap().get(column);
+    		Boolean isString = typeName.compareTo(String.class.getName()) == 0;
     		Map<String, Integer> barCounts = new HashMap<>();
     		String nextValue = null;
     		Integer currentCount = null;
 
     		for(Map<String, ? extends Serializable> row : data) {
-    			nextValue = String.class.cast(row.get(column));
+    			nextValue = isString ? String.class.cast(row.get(column)) :
+    								   row.get(column).toString();
     			currentCount = barCounts.get(nextValue);
 
     			if(currentCount == null) {
