@@ -13,9 +13,9 @@
 </body>
 <script>
 	<#if chartType?? && chartType?is_string && chartType == "line">
-		test("${dataset?json_string}", "${chartType}", "${xType}", "${yType}");
+		test("${dataset?json_string}", "${chartType}", "${xType}", "${yType}", ${width?c}, ${height?c});
 	<#else>
-		test("${dataset?json_string}", "${chartType}");
+		test("${dataset?json_string}", "${chartType}", null, null, ${width?c}, ${height?c});
 	</#if>
 </script>
 </html>

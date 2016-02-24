@@ -1,8 +1,8 @@
-function test (data, chartType, xType, yType) {
+function test (data, chartType, xType, yType, width, height) {
 	var obj = JSON.parse(data);
 	if(chartType == "line") {
-		$.scattershot.lineChart.create(obj, 1020, 550, xType, yType)
+		$.scattershot.lineChart.create(obj, width, height, xType, yType)
 	} else {
-		$.scattershot.barChart.create(obj, 1020, 550, null);	
+		$.scattershot.barChart.create(obj, width, height, null);	
 	}
 }

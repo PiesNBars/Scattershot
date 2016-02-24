@@ -93,7 +93,9 @@ public class DatasetController {
 	}
 
 	@RequestMapping(value="/chart/show/{chartSpecId}", method=RequestMethod.GET)
-	public ModelAndView showDataset(@PathVariable String chartSpecId)
+	public ModelAndView showDataset(@PathVariable String chartSpecId,
+			@RequestParam(value="width", defaultValue="1020") Integer width,
+			@RequestParam(value="height", defaultValue="550") Integer height)
 			throws Exception{
 
 		ChartSpec spec = chartSpecRepository.findOne(chartSpecId);
@@ -122,6 +124,8 @@ public class DatasetController {
 			chartPage.addObject("yType", yType);
 			chartPage.addObject("dataset", jsonData);
 			chartPage.addObject("chartType", chartType);
+			chartPage.addObject("width", width);
+			chartPage.addObject("height", height);
 
 			return chartPage;
 		}
