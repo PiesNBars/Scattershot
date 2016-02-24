@@ -25,7 +25,7 @@
 				<span class="byline">Back to login page</span>
 			</div>
 			<ul class="actions">
-				<li><a href="/main" class="button">Back</a></li>
+				<li><a href="/" class="button">Back</a></li>
 			</ul>
 		</div>
 	</div>

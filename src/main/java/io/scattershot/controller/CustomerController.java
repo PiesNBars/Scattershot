@@ -80,7 +80,7 @@ public class CustomerController {
 		return "false";
 	}
 
-	@RequestMapping(value = "/main", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	ModelAndView getLoginPage(Model m) {
 		ModelAndView modelAndView = new ModelAndView("login");
 

@@ -24,7 +24,7 @@
 				<h2>Go back to login page</h2>
 			</div>
 			<ul class="actions">
-				<li><a href="/main" class="button">Back</a></li>
+				<li><a href="/" class="button">Back</a></li>
 			</ul>
 		</div>
 	</div>
