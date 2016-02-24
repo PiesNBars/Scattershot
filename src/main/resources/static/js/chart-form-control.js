@@ -1,4 +1,6 @@
 function submit(customerId) {
+	
+	debugger;
 	var bins = parseInt($("[name=bins]").val());
 	var request = {
 		chartType: $("[name=chartType]").val(),
@@ -6,7 +8,7 @@ function submit(customerId) {
 		customerId: customerId,
 		datasetName: $("[name=name]").val(),
 		options: $("[name=options]").val(),
-		columns: $("[name=columns]").val()
+		columns: $("[name=columns]:checked").map(function() { return this.value; }).get()
 	};
 
 	$.ajax({

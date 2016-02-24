@@ -44,15 +44,14 @@ public class DatasetController {
 	@RequestMapping(value="/chart/add/{datasetId}", method=RequestMethod.GET)
 	public ModelAndView getDataset(@PathVariable String datasetId,
 			@RequestParam("chartType") String chartType,
-			@RequestParam("columns") String columns,
+			@RequestParam("columns") String[] columns,
 			@RequestParam(required=false, value="colors") String colors,
 			@RequestParam(required=false, value="bins") Integer bins)
 			throws Exception {
 
-		String[] variables = parseColumnNames(columns, ",");
 		CustomerDataset resultset = null;
 		CustomerDataset dataset = datasetRepository.findOne(datasetId);
-		Set<String> columnsDifference = doesNotContain(dataset, variables);
+		Set<String> columnsDifference = doesNotContain(dataset, columns);
 		ChartSpec chart = null;
 
 		if(!columnsDifference.isEmpty()) {
@@ -60,14 +59,14 @@ public class DatasetController {
 		}
 
 		if(chartType.compareTo("histogram") == 0 && bins != null && bins > 0) {
-			resultset = getHistogramData(dataset, variables[0], bins);
+			resultset = getHistogramData(dataset, columns[0], bins);
 			chart = new ChartSpec(ChartType.HISTOGRAM);
 			chart.setBins(bins);
 		} else if (chartType.compareTo("bar") == 0) {
-			resultset = getBarChartData(dataset, variables[0]);
+			resultset = getBarChartData(dataset, columns[0]);
 			chart = new ChartSpec(ChartType.BAR);
-		} else if (chartType.compareTo("line") == 0 && variables.length == 2){
-			resultset = getLineData(dataset, variables);
+		} else if (chartType.compareTo("line") == 0 && columns.length == 2){
+			resultset = getLineData(dataset, columns);
 			chart = new ChartSpec(ChartType.LINE);
 		}
 
@@ -77,7 +76,7 @@ public class DatasetController {
 			String xType = resultset.getTypeMap().get("x");
 			String yType = resultset.getTypeMap().get("y");
 
-			chart.setColumns(variables);
+			chart.setColumns(columns);
 			chart.setDatasetId(datasetId);
 
 			chartSpecRepository.save(chart);
