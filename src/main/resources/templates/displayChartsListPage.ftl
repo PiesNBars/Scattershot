@@ -22,7 +22,7 @@
 			<td>ChartName:</td>
 			<td><button onclick="goToChartFormPage()">
 				<script>
-					var chartID = "${dataset.id}";
+					var chartId = "${dataset.id}";
 				</script>
 				${dataset.name}</button></td>
 		</tr>
