@@ -11,4 +11,7 @@ public interface DatasetRepository extends MongoRepository<CustomerDataset, Stri
 
 	@Query(fields="{'_id' : 1}")
 	public CustomerDataset findIdByCustomerIdAndName(String customerId, String name);
+	
+	@Query(fields="{'typeMap' : 1 }")
+	public CustomerDataset findTypeMapById(String id);
 }

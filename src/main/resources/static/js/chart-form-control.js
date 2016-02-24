@@ -8,14 +8,7 @@ function submit(customerId) {
 		options: $("[name=options]").val(),
 		columns: $("[name=columns]").val()
 	};
-	
-//	private String customerId;
-//	private String datasetName;
-//	private String chartType;
-//	private String columns;
-//	private Integer bins;
-//	private String options;
-	debugger;
+
 	$.ajax({
 		type : "POST",
 		contentType : "application/json",

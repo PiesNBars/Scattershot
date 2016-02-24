@@ -10,7 +10,12 @@ import io.scattershot.customer.Customer;
 import io.scattershot.customer.CustomerRepository;
 import io.scattershot.customer.data.CustomerDataset;
 import io.scattershot.customer.data.DatasetRepository;
+
+import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,12 +41,46 @@ public class CustomerController {
 		@PathVariable("customerID") String customerID) {
 
 		ModelAndView modelAndView = new ModelAndView("displayChartFormPage");
+		Map<String, String> cols = datasetRepository
+				.findTypeMapById(chartID)
+				.getTypeMap();
+		
+		try {
+			Map<String, String> typeNames = getSimpleTypeNames(cols); 
 
-		modelAndView.addObject("title", "Chart Display Page");
-		modelAndView.addObject("chartID", chartID);
-		modelAndView.addObject("customerID", customerID);
+			modelAndView.addObject("title", "Chart Display Page");
+			modelAndView.addObject("chartID", chartID);
+			modelAndView.addObject("customerID", customerID);
+			modelAndView.addObject("columns", typeNames);
 
+		} catch (ClassNotFoundException cnfe) {
+			modelAndView = new ModelAndView("error");
+		}
+		
 		return modelAndView;
+	}
+	
+	private Map<String, String> getSimpleTypeNames(Map<String, String> typeMap) 
+			throws ClassNotFoundException {
+		
+		Map<String, String> typeNames = new HashMap<>();
+		
+		for (String key : typeMap.keySet()) {
+			Class<?> type = Class.forName(typeMap.get(key));
+			String typeName = null;
+			
+			if (Number.class.isAssignableFrom(type)) {
+				typeName = "number";
+			} else if (Date.class.equals(type)) {
+				typeName = "Date-time";
+			} else {
+				typeName = "category";
+			}
+			
+			typeNames.put(key, typeName);
+		}
+		
+		return typeNames;
 	}
 
 	@RequestMapping(value = "/{customerID}/displayChartsList", method = RequestMethod.GET)

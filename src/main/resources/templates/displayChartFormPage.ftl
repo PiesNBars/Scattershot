@@ -23,7 +23,10 @@
 			<input type="radio" name="chartType" value="bar"/>Bar Chart
 			<input type="radio" name="chartType" value="histogram"/>Histogram<br/>
 			Bins (only necessary for histogram): <input type="number" name="bins"/><br/>
-			Columns: <input type="text" name="columns"/><br/>
+			<#list columns?keys as column>
+				<input type="checkbox" name="columns" value="${column}">${column} (${columns[column]})
+			</#list>
+			</br>
 			<input type="submit" value="drawChart"/>
 		</form>
 	</div>
