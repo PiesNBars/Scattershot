@@ -60,7 +60,10 @@ $.scattershot.barChart = (function() {
 			    .scale(y)
 			    .orient("left");
 			
-			var svg = d3.select("body").append("svg")
+			var container = d3.select(".chartContainer").empty() ? d3.select("body") :
+																   d3.select(".chartContainer");
+			
+			var svg = container.append("svg")
 			    .attr("width", width)
 			    .attr("height", height)
 			  .append("g")

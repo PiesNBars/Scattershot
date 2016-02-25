@@ -72,19 +72,23 @@ public class DatasetController {
 
 		if(resultset != null) {
 			String json = objectMapper.writeValueAsString(resultset.getDataset());
-			ModelAndView chartPage = new ModelAndView("chart");
+			ModelAndView chartPage = new ModelAndView("chartDisplay");
 			String xType = resultset.getTypeMap().get("x");
 			String yType = resultset.getTypeMap().get("y");
 
 			chart.setColumns(columns);
 			chart.setDatasetId(datasetId);
 
+			// sets id field.
 			chartSpecRepository.save(chart);
 
 			chartPage.addObject("xType", xType);
 			chartPage.addObject("yType", yType);
 			chartPage.addObject("dataset", json);
+			chartPage.addObject("width", 1020);
+			chartPage.addObject("height", 550);
 			chartPage.addObject("chartType", chartType);
+			chartPage.addObject("chartID", chart.getId());
 
 			return chartPage;
 		}
