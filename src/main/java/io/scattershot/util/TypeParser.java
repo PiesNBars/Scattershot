@@ -37,14 +37,14 @@ public class TypeParser {
 
 		FORMATS = new ArrayList<DateFormat>();
 		FORMATS.add(TIMESTAMP);
+		FORMATS.add(D_US_SLSH_W_TIME);
 		FORMATS.add(D_SLSH_W_TIME);
 		FORMATS.add(D_DSH_W_TIME);
 		FORMATS.add(D_SPC_W_TIME);
-		FORMATS.add(D_US_SLSH_W_TIME);
+		FORMATS.add(D_US_SLSH);
 		FORMATS.add(D_SLSH);
 		FORMATS.add(D_DSH);
 		FORMATS.add(D_SPC);
-		FORMATS.add(D_US_SLSH);
 	}
 
 	public static ParseResult<? extends Serializable> parse(String string) {

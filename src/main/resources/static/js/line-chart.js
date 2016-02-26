@@ -29,9 +29,22 @@ $.scattershot.lineChart = (function() {
 	}
 	
 	var convertDates = function(data, field) {
-		data.forEach(function(d) {
+		return data.map(function(d) {
 			d[field] = new Date(d[field]);
-		})
+			return d;
+		});
+	};
+	
+	var sortDates = function(data, field) {
+		var comparator = function(a, b) {
+			if(a[field].getTime() > b[field].getTime())
+				return 1;
+			if(b[field].getTime() > a[field].getTime())
+				return -1;
+			return 0;
+		};
+		
+		return data.sort(comparator);
 	};
 
 	var getScale = function(data, dataType, field) {
@@ -63,10 +76,10 @@ $.scattershot.lineChart = (function() {
 			debugger;
 			
 			if(isDate(xType))
-				convertDates(dataset, "x");
+				dataset = sortDates(convertDates(dataset, "x"), "x");
 			
 			if(isDate(yType))
-				convertDates(dataset, "y");
+				dataset = sortDates(convertDates(dataset, "y"), "y");
 
 			var focusMarginRatio = {top: 0.01, right: 0.01, bottom: 0.2, left: 0.047};
 			var contextMarginRatio = {top: 0.86, right: 0.01, bottom: 0.04, left: 0047};
@@ -147,7 +160,8 @@ $.scattershot.lineChart = (function() {
 				.datum(dataset)
 				.attr("class", "line")
 				.attr("d", focusLine)
-				.style("stroke", color);
+				.style("stroke", color)
+				.style("fill", "none");
 
 			focus.append("g")
 				.attr("class", "x axis")
@@ -162,7 +176,8 @@ $.scattershot.lineChart = (function() {
 				.datum(dataset)
 				.attr("class", "line")
 				.attr("d", contextLine)
-				.style("stroke", color);
+				.style("stroke", color)
+				.style("fill", "none");
 
 			context.append("g")
 				.attr("class", "x axis")
