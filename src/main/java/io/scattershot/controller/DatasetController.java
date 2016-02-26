@@ -137,13 +137,45 @@ public class DatasetController {
 		return new ModelAndView("error");
 	}
 
+    @RequestMapping(value="/upload", method=RequestMethod.POST)
+    public @ResponseBody String handleFileUpload(@RequestParam("id") String customerId,
+    		@RequestParam("name") String name,
+    		@RequestParam("file") MultipartFile file,
+    		@RequestParam(required=false, value="header") String header,
+    		@RequestParam("hasOwnHeaders") String hasHeaderRow){
 
-	private String[] parseColumnNames(String columnNameString, String sep) {
-		String[] columns = columnNameString.split(sep);
-		for(int i = 0; i < columns.length; i++)
-			columns[i] = columns[i].trim();
-		return columns;
-	}
+    	String[] columnNames = null;
+    	boolean hasHeader = hasHeaderRow.compareTo("true") == 0 ? true : false;
+
+    	if(header != null && header.length() > 0)
+    		columnNames = header.split(",");
+    	if(customerId == null || customerId.equals(""))
+    		return "You didn't provide a customer id! This dataset can't be saved!";
+    	if(name == null || name.isEmpty())
+    		return "You didn't provide a name! This dataset can't be saved!";
+    	if(customerRepository.findById(customerId) == null)
+    		return "That customer doesn't exist! This dataset can't be saved!";
+
+        if (!file.isEmpty()) {
+            try {
+            	CustomerDataset data = (columnNames != null) ?
+            			CSVMapper.mapCSV(file, columnNames) :
+            			CSVMapper.mapCSV(file, hasHeader);
+
+            	data.setCustomerId(customerId);
+            	data.setName(name);
+
+            	datasetRepository.save(data);
+
+                return "You successfully uploaded " + name + "!";
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "You failed to upload " + name + " => " + e.getMessage();
+            }
+        } else {
+            return "You failed to upload " + name + " because the file was empty.";
+        }
+    }
 
 	private CustomerDataset getHistogramData(CustomerDataset data, String column,
 			Integer bins) {
@@ -189,46 +221,6 @@ public class DatasetController {
 
 		return setDifference;
 	}
-
-    @RequestMapping(value="/upload", method=RequestMethod.POST)
-    public @ResponseBody String handleFileUpload(@RequestParam("id") String customerId,
-    		@RequestParam("name") String name,
-    		@RequestParam("file") MultipartFile file,
-    		@RequestParam(required=false, value="header") String header,
-    		@RequestParam("hasOwnHeaders") String hasHeaderRow){
-
-    	String[] columnNames = null;
-    	boolean hasHeader = hasHeaderRow.compareTo("true") == 0 ? true : false;
-
-    	if(header != null && header.length() > 0)
-    		columnNames = header.split(",");
-    	if(customerId == null || customerId.equals(""))
-    		return "You didn't provide a customer id! This dataset can't be saved!";
-    	if(name == null || name.isEmpty())
-    		return "You didn't provide a name! This dataset can't be saved!";
-    	if(customerRepository.findById(customerId) == null)
-    		return "That customer doesn't exist! This dataset can't be saved!";
-
-        if (!file.isEmpty()) {
-            try {
-            	CustomerDataset data = (columnNames != null) ?
-            			CSVMapper.mapCSV(file, columnNames) :
-            			CSVMapper.mapCSV(file, hasHeader);
-
-            	data.setCustomerId(customerId);
-            	data.setName(name);
-
-            	datasetRepository.save(data);
-
-                return "You successfully uploaded " + name + "!";
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "You failed to upload " + name + " => " + e.getMessage();
-            }
-        } else {
-            return "You failed to upload " + name + " because the file was empty.";
-        }
-    }
 
     public class ToBarChart implements Reduceable<CustomerDataset, CustomerDataset> {
 
