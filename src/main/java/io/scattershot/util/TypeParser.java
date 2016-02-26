@@ -13,12 +13,15 @@ public class TypeParser {
 	private static final String DATE_SLASH = "yyyy/MM/dd";
 	private static final String DATE_DASH = "yyyy-MM-dd";
 	private static final String DATE_SPACE = "yyyy MM dd";
+	private static final String DATE_US_SLASH = "MM/dd/yyyy";
 	private static final DateFormat D_SLSH;
 	private static final DateFormat D_DSH;
 	private static final DateFormat D_SPC;
+	private static final DateFormat D_US_SLSH;
 	private static final DateFormat D_SLSH_W_TIME;
 	private static final DateFormat D_DSH_W_TIME;
 	private static final DateFormat D_SPC_W_TIME;
+	private static final DateFormat D_US_SLSH_W_TIME;
 	private static final DateFormat TIMESTAMP = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	private static final ArrayList<DateFormat> FORMATS;
 
@@ -26,18 +29,22 @@ public class TypeParser {
 		D_SLSH = new SimpleDateFormat(DATE_SLASH);
 		D_DSH = new SimpleDateFormat(DATE_DASH);
 		D_SPC = new SimpleDateFormat(DATE_SPACE);
+		D_US_SLSH = new SimpleDateFormat(DATE_US_SLASH);
 		D_SLSH_W_TIME = new SimpleDateFormat(DATE_SLASH + " " + TIME);
 		D_DSH_W_TIME = new SimpleDateFormat(DATE_DASH + " " + TIME);
 		D_SPC_W_TIME = new SimpleDateFormat(DATE_SPACE + " " + TIME);
+		D_US_SLSH_W_TIME = new SimpleDateFormat(DATE_US_SLASH + " " + TIME);
 
 		FORMATS = new ArrayList<DateFormat>();
 		FORMATS.add(TIMESTAMP);
 		FORMATS.add(D_SLSH_W_TIME);
 		FORMATS.add(D_DSH_W_TIME);
 		FORMATS.add(D_SPC_W_TIME);
+		FORMATS.add(D_US_SLSH_W_TIME);
 		FORMATS.add(D_SLSH);
 		FORMATS.add(D_DSH);
 		FORMATS.add(D_SPC);
+		FORMATS.add(D_US_SLSH);
 	}
 
 	public static ParseResult<? extends Serializable> parse(String string) {
