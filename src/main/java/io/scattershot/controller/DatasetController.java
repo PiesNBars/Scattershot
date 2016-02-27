@@ -136,6 +136,17 @@ public class DatasetController {
 
 		return new ModelAndView("error");
 	}
+	
+	@RequestMapping(value="/delete/{datasetId}")
+	public String deleteDataset(@PathVariable String datasetId) {
+		List<CustomerDataset> data = datasetRepository.deleteById(datasetId);
+		
+		if(data.size() < 1 || data.get(0).getCustomerId() == null)
+			return "redirect:/error";
+		
+		String customerId = data.get(0).getCustomerId();
+		return "redirect:/" + customerId + "/displayChartsList";
+	}
 
     @RequestMapping(value="/upload", method=RequestMethod.POST)
     public @ResponseBody String handleFileUpload(@RequestParam("id") String customerId,

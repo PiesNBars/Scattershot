@@ -19,3 +19,7 @@ function goToUploadPage() {
 function goToHomepage() {
 	window.location.replace("/" + customerId +"/homepage");
 }
+
+function deleteDataset(id) {
+	window.location.replace("/delete/" + id);
+}

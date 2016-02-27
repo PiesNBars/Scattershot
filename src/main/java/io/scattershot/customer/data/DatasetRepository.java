@@ -14,4 +14,7 @@ public interface DatasetRepository extends MongoRepository<CustomerDataset, Stri
 	
 	@Query(fields="{'typeMap' : 1 }")
 	public CustomerDataset findTypeMapById(String id);
+	
+	@Query(fields="{'customerId' : 1 }")
+	public List<CustomerDataset> deleteById(String id);
 }

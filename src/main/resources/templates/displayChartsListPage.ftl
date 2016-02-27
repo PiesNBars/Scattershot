@@ -25,6 +25,8 @@
 					var chartId = "${dataset.id}";
 				</script>
 				${dataset.name}</button></td>
+			<td><button onclick="deleteDataset('${dataset.id}')">Delete</button>
+			</td>
 		</tr>
 	</#list>
 	</div>
