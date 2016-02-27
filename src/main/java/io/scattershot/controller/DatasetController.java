@@ -145,7 +145,7 @@ public class DatasetController {
 			return "redirect:/error";
 		
 		String customerId = data.get(0).getCustomerId();
-		return "redirect:/" + customerId + "/displayChartsList";
+		return "redirect:/" + customerId + "/displayDatasetList";
 	}
 
     @RequestMapping(value="/upload", method=RequestMethod.POST)

@@ -5,7 +5,7 @@
  */
 
 function goToDisplayPage() {
-	window.location.replace("/" + customerId +"/displayChartsList");
+	window.location.replace("/" + customerId +"/displayDatasetList");
 }
 
 function goToChartFormPage() {
