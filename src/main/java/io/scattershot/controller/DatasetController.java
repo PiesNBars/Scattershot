@@ -50,7 +50,8 @@ public class DatasetController {
 	@RequestMapping(value="/chart/add/{datasetId}", method=RequestMethod.GET)
 	public ModelAndView getDataset(@PathVariable String datasetId,
 			@RequestParam("chartType") String chartType,
-			@RequestParam("columns") String[] columns,
+			@RequestParam(value="x", required=false) String x,
+			@RequestParam("y") String y,
 			@RequestParam(required=false, value="colors") String colors,
 			@RequestParam(required=false, value="bins") Integer bins,
 			@RequestParam("name") String name)
@@ -58,6 +59,7 @@ public class DatasetController {
 
 		CustomerDataset resultset = null;
 		CustomerDataset dataset = datasetRepository.findOne(datasetId);
+		String[] columns = {x, y};
 		Set<String> columnsDifference = doesNotContain(dataset, columns);
 		ChartSpec chart = null;
 
@@ -66,11 +68,11 @@ public class DatasetController {
 		}
 
 		if(chartType.compareTo("histogram") == 0 && bins != null && bins > 0) {
-			resultset = getHistogramData(dataset, columns[0], bins);
+			resultset = getHistogramData(dataset, y, bins);
 			chart = new ChartSpec(ChartType.HISTOGRAM);
 			chart.setBins(bins);
 		} else if (chartType.compareTo("bar") == 0) {
-			resultset = getBarChartData(dataset, columns[0]);
+			resultset = getBarChartData(dataset, y);
 			chart = new ChartSpec(ChartType.BAR);
 		} else if (chartType.compareTo("line") == 0 && columns.length == 2){
 			resultset = getLineData(dataset, columns);
@@ -126,7 +128,7 @@ public class DatasetController {
 			@RequestParam(value="height", defaultValue=DEFAULT_HEIGHT) Integer height)
 			throws Exception{
 
-		ModelAndView chartView = getChartView(chartSpecId, width, height, "chart");
+		ModelAndView chartView = getChartView(chartSpecId, width, height, EMBED_TEMPLATE);
 		
 		return chartView == null ? new ModelAndView("error") :
 								   chartView;
@@ -261,7 +263,7 @@ public class DatasetController {
 
 		for(int i = 0; i < variables.length; i++){
 			String col = variables[i];
-			if(!tableColumns.contains(col))
+			if(col != null && !tableColumns.contains(col))
 				setDifference.add(col);
 		}
 

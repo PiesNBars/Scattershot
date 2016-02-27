@@ -24,11 +24,14 @@
 			<input type="radio" name="chartType" value="histogram"/>Histogram<br/>
 			Chart Name: <input type="text" name="name"/><br/>
 			Bins (only necessary for histogram): <input type="number" name="bins"/><br/>
-			Columns: <br/>
+			Which column should be represented on the x-axis? <br/>
 			<#list columns?keys as column>
-				<input type="checkbox" name="columns" value="${column}">${column} (${columns[column]})
-			</#list>
-			</br>
+				<input type="checkbox" name="x" value="${column}">${column} (${columns[column]})
+			</#list><br/>
+			Which column should be represented on the y-axis?<br/>
+			<#list columns?keys as column>
+				<input type="checkbox" name="y" value="${column}">${column} (${columns[column]})
+			</#list><br/>
 			<input type="submit" value="drawChart"/>
 		</form>
 	</div>
