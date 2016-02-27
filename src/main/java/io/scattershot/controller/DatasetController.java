@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.scattershot.customer.CustomerRepository;
@@ -35,6 +36,11 @@ import io.scattershot.util.Reduceable;
 
 @Controller
 public class DatasetController {
+	
+	private static final String DEFAULT_WIDTH = "1020";
+	private static final String DEFAULT_HEIGHT = "550";
+	private static final String EMBED_TEMPLATE = "chart";
+	private static final String DISPLAY_TEMPLATE = "chartDisplay";
 
 	@Autowired private DatasetRepository datasetRepository;
 	@Autowired private CustomerRepository customerRepository;
@@ -97,46 +103,33 @@ public class DatasetController {
 
 		return new ModelAndView("error");
 	}
+	
+	@RequestMapping(value="/chart/display/{chartSpecId}", method=RequestMethod.GET)
+	public ModelAndView showChart(@PathVariable String chartSpecId) 
+			throws JsonProcessingException {
+		Integer width = Integer.parseInt(DEFAULT_WIDTH);
+		Integer height = Integer.parseInt(DEFAULT_HEIGHT);
+		ModelAndView chartDisplay = getChartView(chartSpecId, width, height,
+				DISPLAY_TEMPLATE);
+		
+		if(chartDisplay == null)
+			return null;
+		
+		chartDisplay.addObject("chartID", chartSpecId);
+		
+		return chartDisplay;
+	}
 
 	@RequestMapping(value="/chart/show/{chartSpecId}", method=RequestMethod.GET)
 	public ModelAndView showDataset(@PathVariable String chartSpecId,
-			@RequestParam(value="width", defaultValue="1020") Integer width,
-			@RequestParam(value="height", defaultValue="550") Integer height)
+			@RequestParam(value="width", defaultValue=DEFAULT_WIDTH) Integer width,
+			@RequestParam(value="height", defaultValue=DEFAULT_HEIGHT) Integer height)
 			throws Exception{
 
-		ChartSpec spec = chartSpecRepository.findOne(chartSpecId);
-		CustomerDataset dataset = datasetRepository.findOne(spec.getDatasetId());
-		CustomerDataset resultset = null;
-		String chartType = null;
-
-		switch(spec.getChartType()) {
-			case HISTOGRAM: resultset = getHistogramData(dataset, spec.getColumns()[0], spec.getBins());
-							chartType = "histogram";
-							break;
-			case BAR: 		resultset = getBarChartData(dataset, spec.getColumns()[0]);
-							chartType = "bar";
-							break;
-			case LINE: 		resultset = getLineData(dataset, spec.getColumns());
-							chartType = "line";
-		}
-
-		if(resultset != null) {
-			ModelAndView chartPage = new ModelAndView("chart");
-			String jsonData = objectMapper.writeValueAsString(resultset.getDataset());
-			String xType = resultset.getTypeMap().get("x");
-			String yType = resultset.getTypeMap().get("y");
-
-			chartPage.addObject("xType", xType);
-			chartPage.addObject("yType", yType);
-			chartPage.addObject("dataset", jsonData);
-			chartPage.addObject("chartType", chartType);
-			chartPage.addObject("width", width);
-			chartPage.addObject("height", height);
-
-			return chartPage;
-		}
-
-		return new ModelAndView("error");
+		ModelAndView chartView = getChartView(chartSpecId, width, height, "chart");
+		
+		return chartView == null ? new ModelAndView("error") :
+								   chartView;
 	}
 	
 	@RequestMapping(value="/delete/{datasetId}")
@@ -191,6 +184,44 @@ public class DatasetController {
             return "You failed to upload " + name + " because the file was empty.";
         }
     }
+	
+	private ModelAndView getChartView(String chartSpecId, int width, int height,
+			String viewTemplate)
+			throws JsonProcessingException {
+		ChartSpec spec = chartSpecRepository.findOne(chartSpecId);
+		CustomerDataset dataset = datasetRepository.findOne(spec.getDatasetId());
+		CustomerDataset resultset = null;
+		String chartType = null;
+
+		switch(spec.getChartType()) {
+			case HISTOGRAM: resultset = getHistogramData(dataset, spec.getColumns()[0], spec.getBins());
+							chartType = "histogram";
+							break;
+			case BAR: 		resultset = getBarChartData(dataset, spec.getColumns()[0]);
+							chartType = "bar";
+							break;
+			case LINE: 		resultset = getLineData(dataset, spec.getColumns());
+							chartType = "line";
+		}
+
+		if(resultset != null) {
+			ModelAndView chartPage = new ModelAndView(viewTemplate);
+			String jsonData = objectMapper.writeValueAsString(resultset.getDataset());
+			String xType = resultset.getTypeMap().get("x");
+			String yType = resultset.getTypeMap().get("y");
+
+			chartPage.addObject("xType", xType);
+			chartPage.addObject("yType", yType);
+			chartPage.addObject("dataset", jsonData);
+			chartPage.addObject("chartType", chartType);
+			chartPage.addObject("width", width);
+			chartPage.addObject("height", height);
+
+			return chartPage;
+		}
+		
+		return null;
+	}
 
 	private CustomerDataset getHistogramData(CustomerDataset data, String column,
 			Integer bins) {
