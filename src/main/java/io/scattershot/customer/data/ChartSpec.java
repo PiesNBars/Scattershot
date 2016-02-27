@@ -8,6 +8,7 @@ public class ChartSpec {
 
 	@Id
 	private String id;
+	String name;
 	private String datasetId;
 	private String[] columns;
 	private ChartType chartType;
@@ -25,6 +26,12 @@ public class ChartSpec {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getDatasetId() {
 		return datasetId;

@@ -46,7 +46,8 @@ public class DatasetController {
 			@RequestParam("chartType") String chartType,
 			@RequestParam("columns") String[] columns,
 			@RequestParam(required=false, value="colors") String colors,
-			@RequestParam(required=false, value="bins") Integer bins)
+			@RequestParam(required=false, value="bins") Integer bins,
+			@RequestParam("name") String name)
 			throws Exception {
 
 		CustomerDataset resultset = null;
@@ -78,6 +79,7 @@ public class DatasetController {
 
 			chart.setColumns(columns);
 			chart.setDatasetId(datasetId);
+			chart.setName(name);
 
 			// sets id field.
 			chartSpecRepository.save(chart);
@@ -144,7 +146,9 @@ public class DatasetController {
 		if(data.size() < 1 || data.get(0).getCustomerId() == null)
 			return "redirect:/error";
 		
+		chartSpecRepository.deleteAllByDatasetId(datasetId);
 		String customerId = data.get(0).getCustomerId();
+		
 		return "redirect:/" + customerId + "/displayDatasetList";
 	}
 

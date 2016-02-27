@@ -20,12 +20,18 @@
 	<#list customerDataset as dataset>
 		<tr>
 			<td>ChartName:</td>
-			<td><button onclick="goToChartFormPage()">
-				<script>
-					var chartId = "${dataset.id}";
-				</script>
+			<td><button onclick="goToChartListPage('${dataset.id}')">
 				${dataset.name}</button></td>
-			<td><button onclick="deleteDataset('${dataset.id}')">Delete</button>
+			<td>
+				<button onclick="deleteDataset('${dataset.id}')">Delete</button>
+			</td>
+			<td>
+				<button onclick="goToChartFormPage()">
+					<script>
+						var chartId = "${dataset.id}";
+					</script>
+					New Chart
+				</button>
 			</td>
 		</tr>
 	</#list>

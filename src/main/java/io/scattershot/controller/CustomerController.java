@@ -8,6 +8,8 @@ package io.scattershot.controller;
 
 import io.scattershot.customer.Customer;
 import io.scattershot.customer.CustomerRepository;
+import io.scattershot.customer.data.ChartSpec;
+import io.scattershot.customer.data.ChartSpecRepository;
 import io.scattershot.customer.data.CustomerDataset;
 import io.scattershot.customer.data.DatasetRepository;
 
@@ -34,6 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class CustomerController {
 	@Autowired private CustomerRepository customerRepository;
 	@Autowired private DatasetRepository datasetRepository;
+	@Autowired private ChartSpecRepository chartSpecRepository;
 
 	@RequestMapping(value = "/{customerID}/{chartID}/displayChartForm", method = RequestMethod.GET)
 	ModelAndView displayChart(
@@ -58,6 +61,17 @@ public class CustomerController {
 		}
 		
 		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/{datasetId}/displayCharts", method = RequestMethod.GET)
+	ModelAndView displayCharts(@PathVariable("datasetId") String datasetId) {
+		
+		List<ChartSpec> charts = chartSpecRepository.findAllByDatasetId(datasetId);
+		ModelAndView chartPage = new ModelAndView("displayChartListPage");
+		
+		chartPage.addObject("charts", charts);
+		
+		return chartPage;
 	}
 	
 	private Map<String, String> getSimpleTypeNames(Map<String, String> typeMap) 

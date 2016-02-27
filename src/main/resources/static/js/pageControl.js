@@ -8,6 +8,10 @@ function goToDisplayPage() {
 	window.location.replace("/" + customerId +"/displayDatasetList");
 }
 
+function goToChartListPage(id) {
+	window.location.replace("/" + id + "/displayCharts");
+}
+
 function goToChartFormPage() {
 	window.location.replace("/" + customerId + "/" + chartId + "/displayChartForm");
 }

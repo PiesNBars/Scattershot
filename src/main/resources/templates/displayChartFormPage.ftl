@@ -22,6 +22,7 @@
 			<input type="radio" name="chartType" value="line"/>Line Chart
 			<input type="radio" name="chartType" value="bar"/>Bar Chart
 			<input type="radio" name="chartType" value="histogram"/>Histogram<br/>
+			Chart Name: <input type="text" name="name"/><br/>
 			Bins (only necessary for histogram): <input type="number" name="bins"/><br/>
 			Columns: <br/>
 			<#list columns?keys as column>
