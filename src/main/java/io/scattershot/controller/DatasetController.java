@@ -11,8 +11,11 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +33,10 @@ import io.scattershot.customer.data.ChartSpec.ChartType;
 import io.scattershot.customer.data.ChartSpecRepository;
 import io.scattershot.customer.data.CustomerDataset;
 import io.scattershot.customer.data.DatasetRepository;
+import io.scattershot.exception.AttributeNotFoundException;
+import io.scattershot.exception.ChartNotFoundException;
+import io.scattershot.exception.DatasetNotFoundException;
+import io.scattershot.exception.FormProcessingException;
 import io.scattershot.util.CSVMapper;
 import io.scattershot.util.Mappable;
 import io.scattershot.util.Reduceable;
@@ -64,7 +71,7 @@ public class DatasetController {
 		ChartSpec chart = null;
 
 		if(!columnsDifference.isEmpty()) {
-			return new ModelAndView("error");
+			throw new AttributeNotFoundException();
 		}
 
 		if(chartType.compareTo("histogram") == 0 && bins != null && bins > 0) {
@@ -78,32 +85,32 @@ public class DatasetController {
 			resultset = getLineData(dataset, columns);
 			chart = new ChartSpec(ChartType.LINE);
 		}
-
-		if(resultset != null) {
-			String json = objectMapper.writeValueAsString(resultset.getDataset());
-			ModelAndView chartPage = new ModelAndView("chartDisplay");
-			String xType = resultset.getTypeMap().get("x");
-			String yType = resultset.getTypeMap().get("y");
-
-			chart.setColumns(columns);
-			chart.setDatasetId(datasetId);
-			chart.setName(name);
-
-			// sets id field.
-			chartSpecRepository.save(chart);
-
-			chartPage.addObject("xType", xType);
-			chartPage.addObject("yType", yType);
-			chartPage.addObject("dataset", json);
-			chartPage.addObject("width", 1020);
-			chartPage.addObject("height", 550);
-			chartPage.addObject("chartType", chartType);
-			chartPage.addObject("chartID", chart.getId());
-
-			return chartPage;
+		
+		if(resultset == null) {
+			throw new FormProcessingException();
 		}
+		
+		String json = objectMapper.writeValueAsString(resultset.getDataset());
+		ModelAndView chartPage = new ModelAndView("chartDisplay");
+		String xType = resultset.getTypeMap().get("x");
+		String yType = resultset.getTypeMap().get("y");
 
-		return new ModelAndView("error");
+		chart.setColumns(columns);
+		chart.setDatasetId(datasetId);
+		chart.setName(name);
+
+		// sets id field.
+		chartSpecRepository.save(chart);
+
+		chartPage.addObject("xType", xType);
+		chartPage.addObject("yType", yType);
+		chartPage.addObject("dataset", json);
+		chartPage.addObject("width", 1020);
+		chartPage.addObject("height", 550);
+		chartPage.addObject("chartType", chartType);
+		chartPage.addObject("chartID", chart.getId());
+
+		return chartPage;
 	}
 	
 	@RequestMapping(value="/chart/display/{chartSpecId}", method=RequestMethod.GET)
@@ -130,8 +137,11 @@ public class DatasetController {
 
 		ModelAndView chartView = getChartView(chartSpecId, width, height, EMBED_TEMPLATE);
 		
-		return chartView == null ? new ModelAndView("error") :
-								   chartView;
+		if(chartView == null) {
+			throw new ChartNotFoundException();
+		}
+		
+		return chartView;
 	}
 	
 	@RequestMapping(value="/delete/{datasetId}")
@@ -139,7 +149,7 @@ public class DatasetController {
 		List<CustomerDataset> data = datasetRepository.deleteById(datasetId);
 		
 		if(data.size() < 1 || data.get(0).getCustomerId() == null)
-			return "redirect:/error";
+			throw new DatasetNotFoundException();
 		
 		chartSpecRepository.deleteAllByDatasetId(datasetId);
 		String customerId = data.get(0).getCustomerId();
@@ -186,14 +196,28 @@ public class DatasetController {
             return "You failed to upload " + name + " because the file was empty.";
         }
     }
+    
+    @ExceptionHandler(Exception.class)
+    public ModelAndView ExceptionHandler(HttpServletRequest req, Exception ex) {
+    	ModelAndView exceptionPage = new ModelAndView("error");
+    	
+    	exceptionPage.addObject("errorMessage", ex.getMessage());
+    	
+    	return exceptionPage;
+    }
 	
 	private ModelAndView getChartView(String chartSpecId, int width, int height,
 			String viewTemplate)
 			throws JsonProcessingException {
 		ChartSpec spec = chartSpecRepository.findOne(chartSpecId);
-		CustomerDataset dataset = datasetRepository.findOne(spec.getDatasetId());
+		CustomerDataset dataset = null;
 		CustomerDataset resultset = null;
 		String chartType = null;
+		
+		if(spec == null)
+			throw new ChartNotFoundException();
+		
+		dataset = datasetRepository.findOne(spec.getDatasetId());
 
 		switch(spec.getChartType()) {
 			case HISTOGRAM: resultset = getHistogramData(dataset, spec.getColumns()[0], spec.getBins());
