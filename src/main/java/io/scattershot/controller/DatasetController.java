@@ -144,7 +144,7 @@ public class DatasetController {
 		return chartView;
 	}
 	
-	@RequestMapping(value="/delete/{datasetId}")
+	@RequestMapping(value="/delete/dataset/{datasetId}")
 	public String deleteDataset(@PathVariable String datasetId) {
 		List<CustomerDataset> data = datasetRepository.deleteById(datasetId);
 		
@@ -155,6 +155,18 @@ public class DatasetController {
 		String customerId = data.get(0).getCustomerId();
 		
 		return "redirect:/" + customerId + "/displayDatasetList";
+	}
+	
+	@RequestMapping(value="/delete/chart/{chartId}")
+	public String deleteChart(@PathVariable String chartId) {
+		List<ChartSpec> charts = chartSpecRepository.deleteById(chartId);
+		
+		if(charts.size() < 1)
+			throw new ChartNotFoundException();
+		
+		String datasetId = charts.get(0).getDatasetId();
+		
+		return "redirect:/" + datasetId + "/displayCharts";
 	}
 
     @RequestMapping(value="/upload", method=RequestMethod.POST)
