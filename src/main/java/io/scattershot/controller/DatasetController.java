@@ -233,7 +233,8 @@ public class DatasetController {
 		if(resultset != null) {
 			ModelAndView chartPage = new ModelAndView(viewTemplate);
 			String jsonData = objectMapper.writeValueAsString(resultset.getDataset());
-			String xType = resultset.getTypeMap().get("x");
+			String xType = resultset.getTypeMap().get("x") == null ? resultset.getTypeMap().get("x") :
+															 "none";
 			String yType = resultset.getTypeMap().get("y");
 
 			chartPage.addObject("xType", xType);
