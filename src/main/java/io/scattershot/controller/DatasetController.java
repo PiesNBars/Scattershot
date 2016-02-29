@@ -220,10 +220,10 @@ public class DatasetController {
 		dataset = datasetRepository.findOne(spec.getDatasetId());
 
 		switch(spec.getChartType()) {
-			case HISTOGRAM: resultset = getHistogramData(dataset, spec.getColumns()[0], spec.getBins());
+			case HISTOGRAM: resultset = getHistogramData(dataset, spec.getColumns()[1], spec.getBins());
 							chartType = "histogram";
 							break;
-			case BAR: 		resultset = getBarChartData(dataset, spec.getColumns()[0]);
+			case BAR: 		resultset = getBarChartData(dataset, spec.getColumns()[1]);
 							chartType = "bar";
 							break;
 			case LINE: 		resultset = getLineData(dataset, spec.getColumns());
