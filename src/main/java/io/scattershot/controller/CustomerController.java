@@ -186,7 +186,7 @@ public class CustomerController {
 		}
 		else {
 			if (c.getPassword().equals(customer.getPassword())) {
-				ModelAndView modelAndView = new ModelAndView("userHomepage");
+				ModelAndView modelAndView = new ModelAndView("redirect:/" + c.getId() + "/homepage");
 
 				modelAndView.addObject("title", "User Home Page");
 				modelAndView.addObject("userFirstName", c.getFirstName());
