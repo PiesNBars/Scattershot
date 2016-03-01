@@ -34,7 +34,9 @@
 	<div id="banner">
 		<div class="form">
 			<form method="POST" enctype="multipart/form-data" action="/upload">
-				<h2>Please Use this form to upload your dataset
+				<h2>Please Use this form to upload your dataset</h2>
+				<br />
+				<h3>
 				<input type="hidden" name="id" value="${customerID}" />
 				Column names: <input type="text" name="header">
 				<br />
@@ -50,33 +52,11 @@
 				Name: <input type="text" name="name">
 				<br />
 				<br />
-
-				<input type="submit" value="Upload"> Press here to upload the file!
+				<input type="submit" value="Upload" class="button">
+				</h3>
 			</form>
+
 		</div>
 	</div>
-
-	<#-- <div> Customer id is: ${customerID}</div>
-	<button onclick="goToHomepage()" class="button">Homepage</button>
-   	<form method="POST" enctype="multipart/form-data" action="/upload">
-		<input type="hidden" name="id" value="${customerID}" />
-		Column names: <input type="text" name="header">
-		<br />
-
-		Does this file contain a header row (column names)?:
-		<input type="radio" name="hasOwnHeaders" value="true" checked/>Yes
-		<input type="radio" name="hasOwnHeaders" value="false"/>No
-		<br />
-
-		File to upload: <input type="file" name="file">
-		<br />
-
-		Name: <input type="text" name="name">
-		<br />
-		<br />
-
-		<input type="submit" value="Upload"> Press here to upload the file!
-	</form> -->
 </body>
-
 </html>
