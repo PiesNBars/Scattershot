@@ -4,7 +4,9 @@
     <title>${title}</title>
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="/js/chart-form-control.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
+	<link href="/css/main/default.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="/css/main/fonts.css" rel="stylesheet" type="text/css" media="all" />
 </head>
 
 <body>
@@ -13,9 +15,23 @@
 		var chartId = "${chartID}";
 	</script>
 
-	<div>Chart ID is: ${chartID} </div>
-
-   <div>Customer ID is: ${customerID} </div>
+	<div id="wrapper">
+		<div id="header-wrapper">
+			<div id="header" class="container">
+				<div id="logo">
+				<h1><a href="/${customerID}/homepage">Upload Page</a></h1>
+				</div>
+				<div id="menu">
+					<ul>
+						<li><a href="/${customerID}/homepage" accesskey="1" title="">Homepage</a></li>
+						<li class="current_page_item"><a href="#" onclick="goToDisplayPage()" accesskey="2" title="">Display Charts</a></li>
+						<li><a href="#" onclick="goToUploadPage()" accesskey="3" title="">Upload</a></li>
+						<li><a href="#" accesskey="4" title="">Contact Us</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div>
 		<form method="get" action="/chart/add/${chartID}">
 			What type of Chart Is this?
