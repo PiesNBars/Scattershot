@@ -22,11 +22,8 @@
 		<div class="container">
 			<div class="title">
 				<h2>${message}</h2>
-				<span class="byline">Back to login page</span>
+				<a href="/"><span class="byline">Back to login page</span></a>
 			</div>
-			<ul class="actions">
-				<li><a href="/" class="button">Back</a></li>
-			</ul>
 		</div>
 	</div>
 

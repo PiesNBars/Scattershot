@@ -12,7 +12,7 @@
 		<div id="header-wrapper">
 			<div id="header" class="container">
 				<div id="logo">
-					<h1><a href="#">User not found page, ${userEmail} is not a valid email, please register</a></h1>
+					<h1><a href="#">User not found page, ${userEmail} is not a valid user email, please register with this email first</a></h1>
 				</div>
 			</div>
 		</div>
@@ -21,11 +21,8 @@
 	<div id="banner">
 		<div class="container">
 			<div class="title">
-				<h2>Go back to login page</h2>
+				<a href="/"><h2>Go back to login page</h2></a>
 			</div>
-			<ul class="actions">
-				<li><a href="/" class="button">Back</a></li>
-			</ul>
 		</div>
 	</div>
 </body>

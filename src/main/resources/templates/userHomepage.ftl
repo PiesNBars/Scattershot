@@ -21,7 +21,15 @@
 		<div id="header-wrapper">
 			<div id="header" class="container">
 				<div id="logo">
-					<h1><a href="#">User page, Welcome ${userFirstName} and ${customer.lastName}</a></h1>
+				<h1><a href="/${customer.id}/homepage">Welcome ${userFirstName}</a></h1>
+				</div>
+				<div id="menu">
+					<ul>
+						<li class="current_page_item"><a href="/${customer.id}/homepage" accesskey="1" title="">Homepage</a></li>
+						<li><a href="#" onclick="goToDisplayPage()" accesskey="2" title="">Display Charts</a></li>
+						<li><a href="#" onclick="goToUploadPage()" accesskey="3" title="">Upload</a></li>
+						<li><a href="#" accesskey="4" title="">Contact Us</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -31,11 +39,8 @@
 		<div class="container">
 			<div class="title">
 				<h2>Display my charts</h2>
-				<span class="byline">Go to list of charts</span>
+				<a href="#" onclick="goToDisplayPage()"><span class="byline">Go to list of charts</span></a>
 			</div>
-			<ul class="actions">
-				<li><button onclick="goToDisplayPage()" class="button">Add</button></li>
-			</ul>
 		</div>
 	</div>
 
@@ -43,11 +48,8 @@
 		<div class="container">
 			<div class="title">
 				<h2>Upload a new chart</h2>
-				<span class="byline">go to upload page</span>
+				<a href="#" onclick="goToUploadPage()"><span class="byline">go to upload page</span></a>
 			</div>
-			<ul class="actions">
-				<li><button onclick="goToUploadPage()" class="button">Add</button></li>
-			</ul>
 		</div>
 	</div>
 
