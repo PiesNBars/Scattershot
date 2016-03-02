@@ -25,7 +25,7 @@
 		</div>
 	</div>
 <h1>Your Charts</h1><br/>
-<button onclick="goToChartFormPage()">
+<button onclick="newChart('${customerId}', '${datasetId}')">
 	<script>
 		var chartId = "${datasetId}";
 	</script>

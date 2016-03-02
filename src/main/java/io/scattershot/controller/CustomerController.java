@@ -71,9 +71,11 @@ public class CustomerController {
 		
 		List<ChartSpec> charts = chartSpecRepository.findAllByDatasetId(datasetId);
 		ModelAndView chartPage = new ModelAndView("displayChartListPage");
+		String customerId = datasetRepository.findCustomerIdById(datasetId).getCustomerId();
 		
 		chartPage.addObject("charts", charts);
 		chartPage.addObject("datasetId", datasetId);
+		chartPage.addObject("customerId", customerId);
 		
 		return chartPage;
 	}
