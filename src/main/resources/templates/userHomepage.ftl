@@ -5,6 +5,7 @@
 	<link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
 	<link href="/css/main/default.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="/css/main/fonts.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="/css/animate.css" rel="stylesheet" type="text/css" media="all" />
 
 	<script src="/js/login-control.js"></script>
 	<script src="/js/pageControl.js"></script>
@@ -21,7 +22,7 @@
 		<div id="header-wrapper">
 			<div id="header" class="container">
 				<div id="logo">
-				<h1><a href="/${customer.id}/homepage">Welcome ${userFirstName}</a></h1>
+				<h1 class="animated tada"><a href="/${customer.id}/homepage">Welcome ${userFirstName}</a></h1>
 				</div>
 				<div id="menu">
 					<ul>
@@ -36,7 +37,7 @@
 	</div>
 
 	<div id="banner">
-		<div class="container">
+		<div class="container animated bounceInUp">
 			<div class="title">
 				<h2>Display my charts</h2>
 				<a href="#" onclick="goToDisplayPage()"><span class="byline">Go to list of charts</span></a>
@@ -45,7 +46,7 @@
 	</div>
 
 	<div id="banner">
-		<div class="container">
+		<div class="container animated bounceInUp">
 			<div class="title">
 				<h2>Upload a new chart</h2>
 				<a href="#" onclick="goToUploadPage()"><span class="byline">go to upload page</span></a>
