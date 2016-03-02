@@ -25,6 +25,12 @@
 		</div>
 	</div>
 <h1>Your Charts</h1><br/>
+<button onclick="goToChartFormPage()">
+	<script>
+		var chartId = "${datasetId}";
+	</script>
+	New Chart
+</button>
 <#list charts as chart>
 	<div width="100", height="120">
 		<a href="http://www.scattershot.tech/chart/display/${chart.id}">${chart.name}</a>

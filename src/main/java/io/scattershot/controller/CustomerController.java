@@ -73,6 +73,7 @@ public class CustomerController {
 		ModelAndView chartPage = new ModelAndView("displayChartListPage");
 		
 		chartPage.addObject("charts", charts);
+		chartPage.addObject("datasetId", datasetId);
 		
 		return chartPage;
 	}

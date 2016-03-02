@@ -42,14 +42,6 @@
 			<td>
 				<button onclick="deleteDataset('${dataset.id}')">Delete</button>
 			</td>
-			<td>
-				<button onclick="goToChartFormPage()">
-					<script>
-						var chartId = "${dataset.id}";
-					</script>
-					New Chart
-				</button>
-			</td>
 		</tr>
 	</#list>
 	</div>
