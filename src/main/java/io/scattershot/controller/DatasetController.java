@@ -2,6 +2,8 @@ package io.scattershot.controller;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -363,7 +365,8 @@ public class DatasetController {
 
     public class ToHistogram implements Reduceable<CustomerDataset, CustomerDataset> {
 
-    	private int bins;
+    	private static final int SIGNIFICANT_FIGURES = 4;
+		private int bins;
     	private String column;
     	private CustomerDataset rawData;
 
@@ -386,6 +389,8 @@ public class DatasetController {
     		Number max = null;
     		Double prevBound = Double.NEGATIVE_INFINITY ;
     		Double nextBound = null;
+    		String readableUpperBound = null;
+    		String readableLowerBound = null; 		
     		Stack<Double> boundries = null;
 			Integer currentCount = null;
 
@@ -403,23 +408,40 @@ public class DatasetController {
     			Map<String, Serializable> nextRow = new HashMap<>();
     			currentCount = 0;
     			nextBound = boundries.pop();
+    			readableUpperBound = getReadableValue(nextBound);
+    			readableLowerBound = prevBound.isInfinite() ? prevBound.toString() : getReadableValue(prevBound);
 
     			while(sortedValues.peek().doubleValue() < nextBound) {
     				sortedValues.poll();
     				currentCount++;
     			}
 
-    			nextRow.put("key", "[" + prevBound + "," + currentCount + ")");
+    			nextRow.put("key", "[" + readableLowerBound + "," + readableUpperBound + ")");
     			nextRow.put("value", currentCount);
     			aggregateData.add(nextRow);
     			prevBound = nextBound;
     		}
 
-    		finalRow.put("key", "[" + prevBound + "," + max + "]");
+    		finalRow.put("key", "[" + getReadableValue(prevBound) + "," + max + "]");
     		finalRow.put("value", sortedValues.size());
     		aggregateData.add(finalRow);
 
     		return new CustomerDataset(aggregateData);
+    	}
+    	
+    	private String getReadableValue(double rawNumber) {
+    		return roundToNSignificantFigures(rawNumber, SIGNIFICANT_FIGURES).toString();
+    	}
+    	
+    	private Double roundToNSignificantFigures(double rawNumber, int significantFigures) {
+    		if (significantFigures < 1)
+    			return null;
+    		
+    		BigDecimal bd = new BigDecimal(rawNumber);
+    		bd = bd.round(new MathContext(significantFigures));
+    		double rounded = bd.doubleValue();
+    		
+    		return rounded;
     	}
 
     	private Stack<Double> getBinBoundries(double min, double max) {
