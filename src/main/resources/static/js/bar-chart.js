@@ -24,6 +24,14 @@ $.scattershot.barChart = (function() {
 		
 	};
 	
+
+	var createToolTipElement = function(getDisplayValueFromData) {
+		return d3.tip()
+			.attr("class", "d3-tip")
+			.offset([-10, 0])
+			.html(getDisplayValueFromData);
+	};
+	
 	var that = {
 		create: function(data, width, height, palette) {
 			// This code taken largely from the example at
@@ -69,6 +77,14 @@ $.scattershot.barChart = (function() {
 			  .append("g")
 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 			
+			var getYValueFromDatum = function(d) {
+				return "<strong>Value:</strong> <span style='color:red'>" + d.value + "</span>"
+			};
+			
+			var tip = createToolTipElement(getYValueFromDatum);
+			
+			svg.call(tip);
+			
 			x.domain(data.map(function(d) { return d.key; }));
 			y.domain([Math.min(d3.min(data, function(d) { return d.value; }), 0),
 			          d3.max(data, function(d) { return d.value; })]);
@@ -93,6 +109,8 @@ $.scattershot.barChart = (function() {
 			    .style("fill", function(d) { return barColor(d.key); })
 			    .on("mouseover", function() { d3.select(this).style("fill", color.highlight); })
 			    .on("mouseout", function(d) { d3.select(this).style("fill", barColor(d.key)); })
+			    .on("mouseover.tip", tip.show)
+			    .on("mouseout.tip", tip.hide);
 
 		}	
 	};

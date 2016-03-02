@@ -63,6 +63,12 @@ $.scattershot.lineChart = (function() {
 		return data.sort(comparator);
 	};
 	
+	var createToolTipElement = function(getDisplayValueFromData) {
+		return d3.tip()
+			.attr("class", "d3-tip")
+			.html(getDisplayValueFromData);
+	};
+	
 	var sortNumeric = function(data, field) {
 		var compareNumbers = function(a, b) {
 			if(a[field] > b[field])
