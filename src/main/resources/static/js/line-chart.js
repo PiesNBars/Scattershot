@@ -24,9 +24,25 @@ $.scattershot.lineChart = (function() {
 		};
 	};
 	
+	var stringContainsSubstring = function(string, substring) {
+		return string.indexOf(substring) >= 0;
+	};
+	
+	var getType = function (dataType) {
+		var lowerCaseType = dataType.toLowerCase();
+		
+		if(stringContainsSubstring(lowerCaseType, "date")) {
+			return "date";
+		} else if (stringContainsSubstring(lowerCaseType, "string")) {
+			return "string"
+		} else {
+			return "number";
+		}
+	};
+	
 	var isDate = function(dataType) {
 		return (dataType.toLowerCase().indexOf("date") >= 0);
-	}
+	};
 	
 	var convertDates = function(data, field) {
 		return data.map(function(d) {
@@ -45,6 +61,18 @@ $.scattershot.lineChart = (function() {
 		};
 		
 		return data.sort(comparator);
+	};
+	
+	var sortNumeric = function(data, field) {
+		var compareNumbers = function(a, b) {
+			if(a[field] > b[field])
+				return 1;
+			if(b[field] > a[field])
+				return -1;
+			return 0;
+		}
+		
+		return data.sort(compareNumbers);
 	};
 
 	var getScale = function(data, dataType, field) {
@@ -78,8 +106,11 @@ $.scattershot.lineChart = (function() {
 			if(isDate(xType))
 				dataset = sortDates(convertDates(dataset, "x"), "x");
 			
+			if(getType(xType) === "number")
+				dataset = sortNumeric(dataset, "x");
+			
 			if(isDate(yType))
-				dataset = sortDates(convertDates(dataset, "y"), "y");
+				dataset = convertDates(dataset, "y");
 
 			var focusMarginRatio = {top: 0.01, right: 0.01, bottom: 0.2, left: 0.047};
 			var contextMarginRatio = {top: 0.86, right: 0.01, bottom: 0.04, left: 0047};
