@@ -66,6 +66,7 @@ $.scattershot.lineChart = (function() {
 	var createToolTipElement = function(getDisplayValueFromData) {
 		return d3.tip()
 			.attr("class", "d3-tip")
+			.offset([-10, 0])
 			.html(getDisplayValueFromData);
 	};
 	
@@ -185,13 +186,21 @@ $.scattershot.lineChart = (function() {
 				.attr("class", "context")
 				.attr("transform", "translate(" + focusMargin.left + "," + contextMargin.top + ")");
 
+			var getYValueFromDatum = function(d) {
+				return "<strong>Value:</strong> <span style='color:red'>" + d.y + "</span>"
+			};
+
+			var tip = createToolTipElement(getYValueFromDatum);
+			
+			svg.call(tip);
+			
 			color = color || "steelblue";
 
 			svg.append("defs").append("clipPath")
 				.attr("id", "clip")
 				.append("rect")
 				.attr("width", plotWidth)
-				.attr("height", focusHeight);	
+				.attr("height", focusHeight);
 
 			focus.append("path")
 				.datum(dataset)
@@ -208,6 +217,17 @@ $.scattershot.lineChart = (function() {
 			focus.append("g")
 				.attr("class", "y axis")
 				.call(focusYAxis);
+			
+			focus.selectAll(".point")
+				.data(dataset)
+				.enter().append("circle")
+				.attr("class", "point")
+				.attr("cx", function(d) { return focusXScale(d.x); })
+				.attr("cy", function(d) { return focusYScale(d.y); })
+				.attr("r", 2)
+				.style("fill", color)
+				.on("mouseover", tip.show)
+				.on("mouseout", tip.hide);
 
 			context.append("path")
 				.datum(dataset)
@@ -227,10 +247,22 @@ $.scattershot.lineChart = (function() {
 				.selectAll("rect")
 				.attr("y", -6)
 				.attr("height", contextHeight + 7);
+			
+			context.selectAll(".point")
+				.data(dataset)
+				.enter().append("circle")
+				.attr("class", "point")
+				.attr("cx", function(d) { return contextXScale(d.x); })
+				.attr("cy", function(d) { return contextYScale(d.y); })
+				.attr("r", 2)
+				.style("fill", color);
 
 			function brushed() {
 				focusXScale.domain(brush.empty() ? contextXScale.domain() : brush.extent());
 				focus.select(".line").attr("d", focusLine);
+				focus.selectAll(".point")
+					.attr("cy", function(d) { return focusYScale(d.y); })
+					.attr("cx", function(d) { return focusXScale(d.x); })
 				focus.select(".x.axis").call(focusXAxis);
 			}
 		}
