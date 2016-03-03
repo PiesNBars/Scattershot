@@ -19,7 +19,7 @@
 		<div id="header-wrapper">
 			<div id="header" class="container">
 				<div id="logo">
-				<h1><a href="/${customerID}/homepage">Upload Page</a></h1>
+				<h1><a href="/${customerID}/homepage">New Chart Page</a></h1>
 				</div>
 				<div id="menu">
 					<ul>
