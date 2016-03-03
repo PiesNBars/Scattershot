@@ -32,24 +32,27 @@
 			</div>
 		</div>
 	</div>
-	<div>
-		<form method="get" action="/chart/add/${chartID}">
-			What type of Chart Is this?
-			<input type="radio" name="chartType" value="line"/>Line Chart
-			<input type="radio" name="chartType" value="bar"/>Bar Chart
-			<input type="radio" name="chartType" value="histogram"/>Histogram<br/>
-			Chart Name: <input type="text" name="name"/><br/>
-			Bins (only necessary for histogram): <input type="number" name="bins"/><br/>
-			Which column should be represented on the x-axis? <br/>
-			<#list columns?keys as column>
-				<input type="radio" name="x" value="${column}">${column} (${columns[column]})
-			</#list><br/>
-			Which column should be represented on the y-axis?<br/>
-			<#list columns?keys as column>
-				<input type="radio" name="y" value="${column}">${column} (${columns[column]})
-			</#list><br/>
-			<input type="submit" value="drawChart"/>
-		</form>
+	<div id="banner">
+		<div class="form">
+			<h2 align="left">Please use this form to create a chart with your dataset</h2><br />
+			<form method="get" action="/chart/add/${chartID}">
+				What type of Chart Is this?
+				<input type="radio" name="chartType" value="line"/>Line Chart
+				<input type="radio" name="chartType" value="bar"/>Bar Chart
+				<input type="radio" name="chartType" value="histogram"/>Histogram<br/>
+				Chart Name: <input type="text" name="name"/><br/>
+				Bins (only necessary for histogram): <input type="number" name="bins"/><br/>
+				Which column should be represented on the x-axis? <br/>
+				<#list columns?keys as column>
+					<input type="radio" name="x" value="${column}">${column} (${columns[column]})
+				</#list><br/>
+				Which column should be represented on the y-axis?<br/>
+				<#list columns?keys as column>
+					<input type="radio" name="y" value="${column}">${column} (${columns[column]})
+				</#list><br/>
+				<input type="submit" value="drawChart" class="button"/>
+			</form>
+		</div>
 	</div>
 </body>
 <script>
