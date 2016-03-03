@@ -165,6 +165,7 @@ public class CustomerController {
 		ModelAndView modelAndView = new ModelAndView("userHomepage");
 
 		modelAndView.addObject("title", "User Home Page");
+		modelAndView.addObject("message", "Welcome " + c.getFirstName());
 		modelAndView.addObject("userFirstName", c.getFirstName());
 		modelAndView.addObject("customer", c);
 

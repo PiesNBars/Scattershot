@@ -22,7 +22,7 @@
 		<div id="header-wrapper">
 			<div id="header" class="container">
 				<div id="logo">
-				<h1 class="animated tada"><a href="/${customer.id}/homepage">Welcome ${userFirstName}</a></h1>
+				<h1 class="animated tada"><a href="/${customer.id}/homepage">${message}</a></h1>
 				</div>
 				<div id="menu">
 					<ul>

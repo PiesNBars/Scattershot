@@ -211,7 +211,7 @@ public class DatasetController {
 
             	datasetRepository.save(data);
 
-				return getHomepage(customerId);
+				return getHomepage(customerId, "Dataset uploaded");
             } catch (Exception e) {
                 e.printStackTrace();
                 return ExceptionHandler(
@@ -325,12 +325,13 @@ public class DatasetController {
 		return setDifference;
 	}
 
-	private ModelAndView getHomepage(String customerID) {
+	private ModelAndView getHomepage(String customerID, String message) {
 		Customer c = customerRepository.findById(customerID);
 
 		ModelAndView modelAndView = new ModelAndView("userHomepage");
 
 		modelAndView.addObject("title", "User Home Page");
+		modelAndView.addObject("message", message);
 		modelAndView.addObject("userFirstName", c.getFirstName());
 		modelAndView.addObject("customer", c);
 
