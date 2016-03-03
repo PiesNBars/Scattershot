@@ -26,19 +26,28 @@
 	</div>
 	<div id="banner">
 		<h1>Your Charts</h1><br/>
+		<table>
+			<tbody>
+				<tr>
+					<td>Chart Name</td>
+					<td>Sample</td>
+					<td>Delete Chart</td>
+				</tr>
+		<#list charts as chart>
+				<tr>
+					<td><a href="http://www.scattershot.tech/chart/display/${chart.id}">${chart.name}</a><td>
+					<td><iframe src="http://www.scattershot.tech/chart/show/${chart.id}?height=100&width=100" width="100" height="100" frameborder="0" scrolling="no"></iframe></td>
+					<td><button onclick="deleteChart('${chart.id}')">Delete</button><td>
+				</tr>
+		</#list>
+			</tbody>
+		</table>
 		<button class="button" onclick="newChart('${customerId}', '${datasetId}')">
 			<script>
 				var chartId = "${datasetId}";
 			</script>
-			New Chart
+			Create New Chart
 		</button>
-		<#list charts as chart>
-			<div width="100", height="120">
-				<a href="http://www.scattershot.tech/chart/display/${chart.id}">${chart.name}</a>
-				<iframe src="http://www.scattershot.tech/chart/show/${chart.id}?height=100&width=100" width="100" height="100" frameborder="0" scrolling="no"></iframe>
-				<button onclick="deleteChart('${chart.id}')">Delete</button>
-			</div>
-		</#list>
 	</div>
 </body>
 </html>
