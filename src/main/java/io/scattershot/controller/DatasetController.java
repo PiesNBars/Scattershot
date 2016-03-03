@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.scattershot.customer.Customer;
 
 import io.scattershot.customer.CustomerRepository;
 import io.scattershot.customer.data.ChartSpec;
@@ -45,7 +45,7 @@ import io.scattershot.util.Reduceable;
 
 @Controller
 public class DatasetController {
-	
+
 	private static final String DEFAULT_WIDTH = "1020";
 	private static final String DEFAULT_HEIGHT = "550";
 	private static final String EMBED_TEMPLATE = "chart";
@@ -87,11 +87,11 @@ public class DatasetController {
 			resultset = getLineData(dataset, columns);
 			chart = new ChartSpec(ChartType.LINE);
 		}
-		
+
 		if(resultset == null) {
 			throw new FormProcessingException();
 		}
-		
+
 		String json = objectMapper.writeValueAsString(resultset.getDataset());
 		ModelAndView chartPage = new ModelAndView("chartDisplay");
 		String xType = resultset.getTypeMap().get("x");
@@ -114,20 +114,20 @@ public class DatasetController {
 
 		return chartPage;
 	}
-	
+
 	@RequestMapping(value="/chart/display/{chartSpecId}", method=RequestMethod.GET)
-	public ModelAndView showChart(@PathVariable String chartSpecId) 
+	public ModelAndView showChart(@PathVariable String chartSpecId)
 			throws JsonProcessingException {
 		Integer width = Integer.parseInt(DEFAULT_WIDTH);
 		Integer height = Integer.parseInt(DEFAULT_HEIGHT);
 		ModelAndView chartDisplay = getChartView(chartSpecId, width, height,
 				DISPLAY_TEMPLATE);
-		
+
 		if(chartDisplay == null)
 			return null;
-		
+
 		chartDisplay.addObject("chartID", chartSpecId);
-		
+
 		return chartDisplay;
 	}
 
@@ -138,41 +138,41 @@ public class DatasetController {
 			throws Exception{
 
 		ModelAndView chartView = getChartView(chartSpecId, width, height, EMBED_TEMPLATE);
-		
+
 		if(chartView == null) {
 			throw new ChartNotFoundException();
 		}
-		
+
 		return chartView;
 	}
-	
+
 	@RequestMapping(value="/delete/dataset/{datasetId}")
 	public String deleteDataset(@PathVariable String datasetId) {
 		List<CustomerDataset> data = datasetRepository.deleteById(datasetId);
-		
+
 		if(data.size() < 1 || data.get(0).getCustomerId() == null)
 			throw new DatasetNotFoundException();
-		
+
 		chartSpecRepository.deleteAllByDatasetId(datasetId);
 		String customerId = data.get(0).getCustomerId();
-		
+
 		return "redirect:/" + customerId + "/displayDatasetList";
 	}
-	
+
 	@RequestMapping(value="/delete/chart/{chartId}")
 	public String deleteChart(@PathVariable String chartId) {
 		List<ChartSpec> charts = chartSpecRepository.deleteById(chartId);
-		
+
 		if(charts.size() < 1)
 			throw new ChartNotFoundException();
-		
+
 		String datasetId = charts.get(0).getDatasetId();
-		
+
 		return "redirect:/" + datasetId + "/displayCharts";
 	}
 
     @RequestMapping(value="/upload", method=RequestMethod.POST)
-    public @ResponseBody String handleFileUpload(@RequestParam("id") String customerId,
+    public ModelAndView handleFileUpload(@RequestParam("id") String customerId,
     		@RequestParam("name") String name,
     		@RequestParam("file") MultipartFile file,
     		@RequestParam(required=false, value="header") String header,
@@ -184,11 +184,21 @@ public class DatasetController {
     	if(header != null && header.length() > 0)
     		columnNames = header.split(",");
     	if(customerId == null || customerId.equals(""))
-    		return "You didn't provide a customer id! This dataset can't be saved!";
+			return ExceptionHandler(
+				null,
+				new Exception(
+					"You didn't provide a customer id! This dataset can't be"
+						+ "saved!"));
     	if(name == null || name.isEmpty())
-    		return "You didn't provide a name! This dataset can't be saved!";
+			return ExceptionHandler(
+				null,
+				new Exception(
+					"You didn't provide a name! This dataset can't be saved!"));
     	if(customerRepository.findById(customerId) == null)
-    		return "That customer doesn't exist! This dataset can't be saved!";
+		return ExceptionHandler(
+				null,
+				new Exception("That customer doesn't exist! This dataset can't"
+					+ "be saved!"));
 
         if (!file.isEmpty()) {
             try {
@@ -201,25 +211,31 @@ public class DatasetController {
 
             	datasetRepository.save(data);
 
-                return "You successfully uploaded " + name + "!";
+				return getHomepage(customerId);
             } catch (Exception e) {
                 e.printStackTrace();
-                return "You failed to upload " + name + " => " + e.getMessage();
+                return ExceptionHandler(
+					null, new Exception(
+						"You failed to upload " + name + " => "
+							+ e.getMessage()));
             }
         } else {
-            return "You failed to upload " + name + " because the file was empty.";
+            return ExceptionHandler(
+				null,
+				new Exception("You failed to upload " + name
+					+ " because the file was empty."));
         }
     }
-    
+
     @ExceptionHandler(Exception.class)
     public ModelAndView ExceptionHandler(HttpServletRequest req, Exception ex) {
     	ModelAndView exceptionPage = new ModelAndView("error");
-    	
+
     	exceptionPage.addObject("errorMessage", ex.getMessage());
-    	
+
     	return exceptionPage;
     }
-	
+
 	private ModelAndView getChartView(String chartSpecId, int width, int height,
 			String viewTemplate)
 			throws JsonProcessingException {
@@ -227,10 +243,10 @@ public class DatasetController {
 		CustomerDataset dataset = null;
 		CustomerDataset resultset = null;
 		String chartType = null;
-		
+
 		if(spec == null)
 			throw new ChartNotFoundException();
-		
+
 		dataset = datasetRepository.findOne(spec.getDatasetId());
 
 		switch(spec.getChartType()) {
@@ -260,7 +276,7 @@ public class DatasetController {
 
 			return chartPage;
 		}
-		
+
 		return null;
 	}
 
@@ -272,7 +288,7 @@ public class DatasetController {
 
 			if(bins == null || bins < 2 || !Number.class.isAssignableFrom(type))
 				return null;
-			
+
 		} catch(ClassNotFoundException cnfe) {
 			return null;
 		}
@@ -307,6 +323,18 @@ public class DatasetController {
 		}
 
 		return setDifference;
+	}
+
+	private ModelAndView getHomepage(String customerID) {
+		Customer c = customerRepository.findById(customerID);
+
+		ModelAndView modelAndView = new ModelAndView("userHomepage");
+
+		modelAndView.addObject("title", "User Home Page");
+		modelAndView.addObject("userFirstName", c.getFirstName());
+		modelAndView.addObject("customer", c);
+
+		return modelAndView;
 	}
 
     public class ToBarChart implements Reduceable<CustomerDataset, CustomerDataset> {
@@ -381,17 +409,16 @@ public class DatasetController {
     	}
 
     	public CustomerDataset call() {
-
-    		List<Map<String, ? extends Serializable>> data = rawData.getDataset();
-    		List<Map<String, ? extends Serializable>> aggregateData = new ArrayList<>();
-    		Map<String, Serializable> finalRow = new HashMap<>();
-    		PriorityQueue<Number> sortedValues = new PriorityQueue<>();
-    		Number max = null;
-    		Double prevBound = Double.NEGATIVE_INFINITY ;
-    		Double nextBound = null;
-    		String readableUpperBound = null;
-    		String readableLowerBound = null; 		
-    		Stack<Double> boundries = null;
+			List<Map<String, ? extends Serializable>> data = rawData.getDataset();
+			List<Map<String, ? extends Serializable>> aggregateData = new ArrayList<>();
+			Map<String, Serializable> finalRow = new HashMap<>();
+			PriorityQueue<Number> sortedValues = new PriorityQueue<>();
+			Number max = null;
+			Double prevBound = Double.NEGATIVE_INFINITY ;
+			Double nextBound = null;
+			String readableUpperBound = null;
+			String readableLowerBound = null;
+			Stack<Double> boundries = null;
 			Integer currentCount = null;
 
     		for(Map<String, ? extends Serializable> row : data) {
@@ -428,19 +455,19 @@ public class DatasetController {
 
     		return new CustomerDataset(aggregateData);
     	}
-    	
+
     	private String getReadableValue(double rawNumber) {
     		return roundToNSignificantFigures(rawNumber, SIGNIFICANT_FIGURES).toString();
     	}
-    	
+
     	private Double roundToNSignificantFigures(double rawNumber, int significantFigures) {
     		if (significantFigures < 1)
     			return null;
-    		
+
     		BigDecimal bd = new BigDecimal(rawNumber);
     		bd = bd.round(new MathContext(significantFigures));
     		double rounded = bd.doubleValue();
-    		
+
     		return rounded;
     	}
 
