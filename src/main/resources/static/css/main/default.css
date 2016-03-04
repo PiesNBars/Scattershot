@@ -99,8 +99,9 @@
 		opacity: 1;
 	}
 
-	table, th, td
+	table, th
 	{
+		width:100%;
 		border: 1px solid black;
 		text-align: center;
 	}
@@ -607,4 +608,38 @@
 	}
 
 
+/*********************************************************************************/
+/* Banner                                                                        */
+/*********************************************************************************/
 
+	#bannerw
+	{
+		overflow: hidden;
+		padding: 7em 0em 5em 0em;
+		background: #e6e6e6;
+		background-size: cover;
+		text-align: center;
+		color: rgba(255,255,255,.8);
+	}
+
+	#bannerw .title
+	{
+		margin-bottom: 1em;
+		text-transform: uppercase !important;
+	}
+
+	#bannerw .title h2
+	{
+		color: #FFF;
+	}
+
+	#bannerw .title .byline
+	{
+		color: rgba(255,255,255,.6);
+	}
+
+	#bannerw .button
+	{
+		margin-top: 3em;
+		background: #009E2D !important;
+	}

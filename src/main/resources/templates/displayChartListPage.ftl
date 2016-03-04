@@ -24,7 +24,13 @@
 			</div>
 		</div>
 	</div>
-	<div id="banner">
+	<div id="bannerw">
+		<button class="button" onclick="newChart('${customerId}', '${datasetId}')">
+			<script>
+				var chartId = "${datasetId}";
+			</script>
+			Create New Chart
+		</button>
 		<h1>Your Charts</h1><br/>
 		<table align="center" border="1">
 			<tr>
@@ -40,12 +46,6 @@
 			</tr>
 	</#list>
 		</table>
-		<button class="button" onclick="newChart('${customerId}', '${datasetId}')">
-			<script>
-				var chartId = "${datasetId}";
-			</script>
-			Create New Chart
-		</button>
 	</div>
 </body>
 </html>
