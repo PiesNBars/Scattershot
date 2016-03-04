@@ -107,8 +107,6 @@ $.scattershot.lineChart = (function() {
 			// This code taken largely from the example at
 			// http://bl.ocks.org/mbostock/1667367
 		create: function(dataset, width, height, xType, yType, color) {
-
-			debugger;
 			
 			if(isDate(xType))
 				dataset = sortDates(convertDates(dataset, "x"), "x");

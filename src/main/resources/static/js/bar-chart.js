@@ -37,8 +37,6 @@ $.scattershot.barChart = (function() {
 			// This code taken largely from the example at
 			// https://bl.ocks.org/mbostock/3885304.
 			
-			debugger;
-			
 			// Constants
 			var marginRatio = {top: 0.036, right: 0.02, bottom: 0.055, left: 0.039};
 			
