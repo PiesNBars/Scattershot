@@ -10,6 +10,7 @@
     <link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
 	<link href="/css/main/default.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="/css/main/fonts.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="/css/chart/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<div id="wrapper">
@@ -51,7 +52,7 @@
 	var generateIframeCode = function() {
 		var width = $("[name=width]").val();
 		var height = $("[name=height]").val();
-		var url = '"http://localhost:8080/chart/show/${chartID}?height=' + height + '&width=' + width + '"';
+		var url = '"http://www.scattershot.tech/chart/show/${chartID}?height=' + height + '&width=' + width + '"';
 		var widthString = '"' + width + '"';
 		var heightString = '"' + height + '"';
 		var embed = "<iframe src=" + url + " width=" + widthString + " height=" + heightString + " frameborder=\"0\" scrolling=\"no\"></iframe>";
