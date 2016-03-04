@@ -3,7 +3,6 @@
 <head>
     <title>${title}</title>
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-	<script src="/js/chart-form-control.js"></script>
     <link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
 	<link href="/css/main/default.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="/css/main/fonts.css" rel="stylesheet" type="text/css" media="all" />
@@ -55,10 +54,5 @@
 		</div>
 	</div>
 </body>
-<script>
-	function submitForm() {
-		submit("${customerID}");
-	};
-</script>
 
 </html>
