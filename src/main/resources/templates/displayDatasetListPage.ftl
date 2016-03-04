@@ -25,7 +25,7 @@
 						<li><a href="/${customerID}/homepage" accesskey="1" title="">Homepage</a></li>
 						<li class="current_page_item"><a href="#" onclick="goToDisplayPage()" accesskey="2" title="">Display Charts</a></li>
 						<li><a href="#" onclick="goToUploadPage()" accesskey="3" title="">Upload</a></li>
-						<li><a href="#" accesskey="4" title="">Contact Us</a></li>
+						<li><a href="/about.html" accesskey="4" title="">About Us</a></li>
 					</ul>
 				</div>
 			</div>
