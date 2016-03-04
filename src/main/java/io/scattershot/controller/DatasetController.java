@@ -415,7 +415,7 @@ public class DatasetController {
 			Map<String, Serializable> finalRow = new HashMap<>();
 			PriorityQueue<Number> sortedValues = new PriorityQueue<>();
 			Number max = null;
-			Double prevBound = Double.NEGATIVE_INFINITY ;
+			Double prevBound = null;
 			Double nextBound = null;
 			String readableUpperBound = null;
 			String readableLowerBound = null;
@@ -430,6 +430,7 @@ public class DatasetController {
     			} catch(ClassCastException cce) {}
     		}
 
+    		prevBound = sortedValues.peek().doubleValue();
     		boundries = getBinBoundries(sortedValues.peek().doubleValue(), max.doubleValue());
 
     		while(!boundries.empty()) {
