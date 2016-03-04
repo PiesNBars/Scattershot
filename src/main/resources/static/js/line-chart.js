@@ -168,7 +168,10 @@ $.scattershot.lineChart = (function() {
 				.y(function(d) { return contextYScale(d.y); });
 
 
-			var svg = d3.select("body").append("svg")
+			var container = d3.select(".chartContainer").empty() ? d3.select("body") :
+																   d3.select(".chartContainer");
+
+			var svg = container.append("svg")
 				.attr("width", width)
 				.attr("height", height);
 
