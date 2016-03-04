@@ -51,7 +51,7 @@
 	var generateIframeCode = function() {
 		var width = $("[name=width]").val();
 		var height = $("[name=height]").val();
-		var url = '"http://www.scattershot.tech/chart/show/${chartID}?height=' + height + '&width=' + width + '"';
+		var url = '"http://localhost:8080/chart/show/${chartID}?height=' + height + '&width=' + width + '"';
 		var widthString = '"' + width + '"';
 		var heightString = '"' + height + '"';
 		var embed = "<iframe src=" + url + " width=" + widthString + " height=" + heightString + " frameborder=\"0\" scrolling=\"no\"></iframe>";
