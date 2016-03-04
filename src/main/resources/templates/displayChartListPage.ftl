@@ -34,8 +34,8 @@
 			</tr>
 	<#list charts as chart>
 			<tr>
-				<td><h3><a href="http://www.scattershot.tech/chart/display/${chart.id}">${chart.name}</a></h3></td>
-				<td><iframe src="http://www.scattershot.tech/chart/show/${chart.id}?height=100&width=100" width="100" height="100" frameborder="0" scrolling="no"></iframe></td>
+				<td><h3><a href="/chart/display/${chart.id}">${chart.name}</a></h3></td>
+				<td><iframe src="/chart/show/${chart.id}?height=100&width=100" width="100" height="100" frameborder="0" scrolling="no"></iframe></td>
 				<td><button onclick="deleteChart('${chart.id}')" class="button">Delete</button><td>
 			</tr>
 	</#list>
