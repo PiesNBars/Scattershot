@@ -17,12 +17,11 @@
 	<script>
 		var customerId = "${customer.id}";
 	</script>
-
 	<div id="wrapper">
 		<div id="header-wrapper">
 			<div id="header" class="container">
 				<div id="logo">
-				<h1 class="animated tada"><a href="/${customer.id}/homepage">${message}</a></h1>
+					<img src="/Drawing_1.png" style="width:100px;height:78px;" alt="Bars graphic by Freepik from Flaticon is licensed under CC BY 3.0. Made with Logo Maker"/>
 				</div>
 				<div id="menu">
 					<ul>
@@ -35,7 +34,11 @@
 			</div>
 		</div>
 	</div>
-
+	<div align="center">
+		<div id="logo">
+			<h1 class="animated tada"><a href="/${customer.id}/homepage">${message}</a></h1>
+		</div>
+	</div>
 	<div id="banner">
 		<div class="container animated bounceInUp">
 			<div class="title">
@@ -53,7 +56,5 @@
 			</div>
 		</div>
 	</div>
-
 </body>
-
 </html>
