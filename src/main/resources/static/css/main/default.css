@@ -99,9 +99,15 @@
 		opacity: 1;
 	}
 
-	table, th
+	table
 	{
 		width:100%;
+		border: 1px solid black;
+		text-align: center;
+	}
+	th
+	{
+		font-size: 24pt;
 		border: 1px solid black;
 		text-align: center;
 	}

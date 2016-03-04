@@ -34,15 +34,15 @@
 		<h1>Your Charts</h1><br/>
 		<table align="center" border="1">
 			<tr>
-				<td>Chart Name</td>
-				<td>Sample</td>
-				<td>Delete Chart</td>
+				<th width="40%">Chart Name</td>
+				<th width="40%">Sample</td>
+				<th width="20%">Delete Chart</td>
 			</tr>
 	<#list charts as chart>
 			<tr>
-				<td><h3><a href="/chart/display/${chart.id}">${chart.name}</a></h3></td>
-				<td><iframe src="/chart/show/${chart.id}?height=100&width=100" width="100" height="100" frameborder="0" scrolling="no"></iframe></td>
-				<td><button onclick="deleteChart('${chart.id}')" class="button">Delete</button><td>
+				<td width="40%"><h3><a href="/chart/display/${chart.id}">${chart.name}</a></h3></td>
+				<td width="40%"><iframe src="/chart/show/${chart.id}?height=100&width=100" width="100" height="100" frameborder="0" scrolling="no"></iframe></td>
+				<td width="20%"><button onclick="deleteChart('${chart.id}')" class="button">Delete</button><td>
 			</tr>
 	</#list>
 		</table>
