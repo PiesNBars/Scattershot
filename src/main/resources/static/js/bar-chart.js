@@ -24,6 +24,53 @@ $.scattershot.barChart = (function() {
 		
 	};
 	
+	var determineXAxisLayoutFromBarCount = function(barCount) {
+		var layout = {
+			chartBottomMargin: determineYAxisMarginFromBarCount(barCount),
+			dx: determineLabelXShiftFromBarCount(barCount),
+			dy: determineLabelYShiftFromBarCount(barCount),
+			textAnchor: determineTextAnchorFromBarCount(barCount),
+			rotation: getRotateAttributeValue(determineRotationAngleFromBarCount(barCount))
+		};
+		return layout;
+	};
+	
+	var determineRotationAngleFromBarCount = function(barCount) {
+		if (barCount > 30)
+			return -90;
+		if (barCount > 12)
+			return -45;
+		return 0;
+	};
+	
+	var determineYAxisMarginFromBarCount = function(barCount) {
+		if (barCount > 30)
+			return .2;
+		if (barCount > 12)
+			return 0.11;
+		return .065;
+	};
+	
+	var determineLabelXShiftFromBarCount = function(barCount) {
+		if (barCount > 12)
+			return -8;
+		return 0;
+	};
+	
+	var determineLabelYShiftFromBarCount = function(barCount) {
+		if (barCount > 30)
+			return -5;
+		if (barCount > 12)
+			return 3;
+		return 0;
+	};
+	
+	var determineTextAnchorFromBarCount = function(barCount) {
+		if (barCount > 12)
+			return "end";
+		return "middle";
+	};
+	
 
 	var createToolTipElement = function(getDisplayValueFromData) {
 		return d3.tip()
@@ -32,19 +79,31 @@ $.scattershot.barChart = (function() {
 			.html(getDisplayValueFromData);
 	};
 	
+	var getRotateAttributeValue = function(number) {
+		if (!(typeof number === "number"))
+			return "rotate(0)";
+		return "rotate(" + number + ")";
+	};
+	
 	var that = {
 		create: function(data, width, height, palette) {
 			// This code taken largely from the example at
 			// https://bl.ocks.org/mbostock/3885304.
 			
-			// Constants
-			var marginRatio = {top: 0.036, right: 0.02, bottom: 0.055, left: 0.039};
+			var xAxisLayout = determineXAxisLayoutFromBarCount(data.length);
+			var bottomMargin = xAxisLayout.chartBottomMargin;
+			
+			var marginRatio = {
+					top: 0.036,
+					right: 0.02,
+					bottom: bottomMargin,
+					left: 0.039};
 			
 			var margin = {
 				right: marginRatio.right * width,
 				left: marginRatio.left * width,
 				top: marginRatio.top * height,
-				bottom: marginRatio.top * height
+				bottom: marginRatio.bottom * height
 			};
 			var chartHeight = height - margin.top - margin.bottom;
 			var chartWidth = width - margin.left - margin.right;
@@ -90,7 +149,12 @@ $.scattershot.barChart = (function() {
 			svg.append("g")
 			    .attr("class", "x axis")
 			    .attr("transform", "translate(0," + chartHeight + ")")
-			    .call(xAxis);
+			    .call(xAxis)
+			    .selectAll("text")
+			    	.style("text-anchor", xAxisLayout.textAnchor)
+			    	.attr("dx", xAxisLayout.dx)
+			    	.attr("dy", xAxisLayout.dy)
+			    	.attr("transform", xAxisLayout.rotation);
 			
 			svg.append("g")
 			    .attr("class", "y axis")
