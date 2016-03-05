@@ -62,7 +62,7 @@ $.scattershot.barChart = (function() {
 			return -5;
 		if (barCount > 12)
 			return 3;
-		return 0;
+		return 6;
 	};
 	
 	var determineTextAnchorFromBarCount = function(barCount) {
