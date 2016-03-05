@@ -10,6 +10,7 @@
     <link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
 	<link href="/css/main/default.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="/css/main/fonts.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="/css/chart/chartDisplay.css" rel="stylesheet" type="text/css" />
 	<link href="/css/chart/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
