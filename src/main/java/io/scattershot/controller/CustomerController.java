@@ -13,7 +13,7 @@ import io.scattershot.customer.data.ChartSpecRepository;
 import io.scattershot.customer.data.CustomerDataset;
 import io.scattershot.customer.data.DatasetRepository;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
