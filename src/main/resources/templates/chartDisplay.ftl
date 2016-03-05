@@ -35,7 +35,7 @@
 		<h1>Look at your neat chart!</h1>
 		<div class="chartContainer"></div>
 
-		<div>Generate some sweet iframe code to embed this chart in your dumb web page! (And make it smarter ;)</div><br/>
+		<div>Generate some sweet iframe code to embed this chart in your web page!</div><br/>
 		Width: <input type="number" name="width"/><br/>
 		Height: <input type="number" name="height"/><br/>
 		<button onClick="generateIframeCode()">Generate</button>
