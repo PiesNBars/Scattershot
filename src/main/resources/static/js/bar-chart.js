@@ -47,7 +47,7 @@ $.scattershot.barChart = (function() {
 		if (barCount > 30)
 			return .2;
 		if (barCount > 12)
-			return 0.11;
+			return 0.13;
 		return .065;
 	};
 	
@@ -94,7 +94,7 @@ $.scattershot.barChart = (function() {
 			var bottomMargin = xAxisLayout.chartBottomMargin;
 			
 			var marginRatio = {
-					top: 0.036,
+					top: 0.09,
 					right: 0.02,
 					bottom: bottomMargin,
 					left: 0.039};
