@@ -34,13 +34,16 @@
 
 	<div id="banner">
 		<table>
+			<tr>
+			<th>ChartName</th>
+			<th>Delete Dataset</th>
+			<tr>
 	<#list customerDataset as dataset>
 		<tr>
-			<td>ChartName:</td>
-			<td><button onclick="goToChartListPage('${dataset.id}')">
-				${dataset.name}</button></td>
+			<td><a href="#" onclick="goToChartListPage('${dataset.id}')">
+				${dataset.name}</a></td>
 			<td>
-				<button onclick="deleteDataset('${dataset.id}')">Delete</button>
+				<a href="#" onclick="deleteDataset('${dataset.id}')">Delete</a>
 			</td>
 		</tr>
 	</#list>
