@@ -36,7 +36,7 @@
 	</div>
 	<div align="center">
 		<div id="logo">
-			<h1 class="animated tada"><a href="/${customer.id}/homepage">${message}</a></h1>
+			<h1 class="animated tada"><a href="/${customer.id}/homepage"></a></h1>
 		</div>
 	</div>
 	<div id="banner">
