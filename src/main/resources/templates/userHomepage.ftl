@@ -51,7 +51,7 @@
 	<div id="banner">
 		<div class="container animated bounceInUp">
 			<div class="title">
-				<h2>Upload a new chart</h2>
+				<h2>Upload a new dataset</h2>
 				<a href="#" onclick="goToUploadPage()"><span class="byline">go to upload page</span></a>
 			</div>
 		</div>
