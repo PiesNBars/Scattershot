@@ -1,3 +1,7 @@
 .chartContainer {
-	background: #cccccc
+	background: #cccccc;
+}
+
+.codeContainer {
+	font-size: medium;
 }
