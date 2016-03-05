@@ -33,14 +33,14 @@
 	</div>
 	<div id="banner">
 		<h1>Look at your neat chart!</h1>
-		<div class="chartContainer"></div>
-
-		<div>Generate some sweet iframe code to embed this chart in your web page!</div><br/>
-		Width: <input type="number" name="width"/><br/>
-		Height: <input type="number" name="height"/><br/>
-		<button onClick="generateIframeCode()">Generate</button>
-		<div class="codeContainer"></div>
-	
+		<div class="chartContainer"></div><br/>
+		<div class="codeGenerator">
+			<div>Generate some sweet iframe code to embed this chart in your web page!</div><br/>
+			Width: <input type="number" name="width"/><br/>
+			Height: <input type="number" name="height"/><br/>
+			<button onClick="generateIframeCode()">Generate</button>
+			<div class="codeContainer"></div>
+		</div>
 	</div>
 </body>
 <script>
