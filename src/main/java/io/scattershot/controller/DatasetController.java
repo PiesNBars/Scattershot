@@ -131,7 +131,7 @@ public class DatasetController {
 		return chartDisplay;
 	}
 
-	@RequestMapping(value="/chart/show/{chartSpecId}", method=RequestMethod.GET)
+	@RequestMapping(value="/chart/embed/{chartSpecId}", method=RequestMethod.GET)
 	public ModelAndView showDataset(@PathVariable String chartSpecId,
 			@RequestParam(value="width", defaultValue=DEFAULT_WIDTH) Integer width,
 			@RequestParam(value="height", defaultValue=DEFAULT_HEIGHT) Integer height)
