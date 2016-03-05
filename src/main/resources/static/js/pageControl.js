@@ -25,5 +25,5 @@ function goToHomepage() {
 }
 
 function deleteDataset(id) {
-	window.location.replace("/delete/dataset" + id);
+	window.location.replace("/delete/dataset/" + id);
 }
