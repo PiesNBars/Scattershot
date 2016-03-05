@@ -117,7 +117,7 @@ $.scattershot.lineChart = (function() {
 			if(isDate(yType))
 				dataset = convertDates(dataset, "y");
 
-			var focusMarginRatio = {top: 0.01, right: 0.01, bottom: 0.2, left: 0.047};
+			var focusMarginRatio = {top: 0.09, right: 0.01, bottom: 0.2, left: 0.047};
 			var contextMarginRatio = {top: 0.86, right: 0.01, bottom: 0.04, left: 0047};
 
 			var focusMargin = {
@@ -208,6 +208,7 @@ $.scattershot.lineChart = (function() {
 				.attr("class", "line")
 				.attr("d", focusLine)
 				.style("stroke", color)
+				.style("stroke-width", 2)
 				.style("fill", "none");
 
 			focus.append("g")
@@ -225,7 +226,7 @@ $.scattershot.lineChart = (function() {
 				.attr("class", "point")
 				.attr("cx", function(d) { return focusXScale(d.x); })
 				.attr("cy", function(d) { return focusYScale(d.y); })
-				.attr("r", 2)
+				.attr("r", 2.5)
 				.style("fill", color)
 				.on("mouseover", tip.show)
 				.on("mouseout", tip.hide);
@@ -235,6 +236,7 @@ $.scattershot.lineChart = (function() {
 				.attr("class", "line")
 				.attr("d", contextLine)
 				.style("stroke", color)
+				.style("stroke-width", 2)
 				.style("fill", "none");
 
 			context.append("g")
@@ -255,7 +257,7 @@ $.scattershot.lineChart = (function() {
 				.attr("class", "point")
 				.attr("cx", function(d) { return contextXScale(d.x); })
 				.attr("cy", function(d) { return contextYScale(d.y); })
-				.attr("r", 2)
+				.attr("r", 2.5)
 				.style("fill", color);
 
 			function brushed() {
