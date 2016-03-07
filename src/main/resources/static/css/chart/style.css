@@ -10,7 +10,7 @@ body {
     shape-rendering: crispEdges;  /* Round any decimal pixels so it'll render nicely */
 }
 
-.line {
+.point, .line {
 	clip-path: url(#clip);
 }
 
