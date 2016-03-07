@@ -42,8 +42,8 @@
 	<div id="banner">
 		<div class="container animated bounceInUp">
 			<div class="title">
-				<h2>Display my charts</h2>
-				<a href="#" onclick="goToDisplayPage()"><span class="byline">Go to list of charts</span></a>
+				<h2>Display my datasets</h2>
+				<a href="#" onclick="goToDisplayPage()"><span class="byline">Go to list of datasets</span></a>
 			</div>
 		</div>
 	</div>
@@ -52,7 +52,7 @@
 		<div class="container animated bounceInUp">
 			<div class="title">
 				<h2>Upload a new dataset</h2>
-				<a href="#" onclick="goToUploadPage()"><span class="byline">go to upload page</span></a>
+				<a href="#" onclick="goToUploadPage()"><span class="byline">go to dataset upload page</span></a>
 			</div>
 		</div>
 	</div>
