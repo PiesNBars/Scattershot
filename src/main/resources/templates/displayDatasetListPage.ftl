@@ -35,7 +35,7 @@
 	<div id="banner">
 		<table>
 			<tr>
-			<th>ChartName</th>
+			<th>Dataset</th>
 			<th>Delete Dataset</th>
 			<tr>
 	<#list customerDataset as dataset>
